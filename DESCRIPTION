@@ -1,0 +1,20 @@
+Package: salaryAnalysis
+Type: Package
+Title: Salary Analysis by the Federal Office for Gender Equality of Switzerland
+Version: 0.1.0
+Authors@R: c(
+  person("Jonathan", "Chassot", email = "jonathan.chassot@unisg.ch", 
+  role = c("aut", "cre")),
+  person("Roman", "Graf", email = "rg@roman-graf.ch",
+  role = c("aut"))
+  )
+Maintainer: Jonathan Chassot <jonathan.chassot@unisg.ch>
+Description: More about what it does (maybe more than one line)
+    Use four spaces when indenting paragraphs within the Description.
+License: What license is it under?
+Encoding: UTF-8
+LazyData: true
+Imports:
+  lubridate (>= 1.7.8),
+  readxl (>= 1.3.1)
+RoxygenNote: 7.1.0
