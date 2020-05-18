@@ -24,16 +24,15 @@ standard_analysis <- function(data, reference_year, female_spec = "F",
                               male_spec = "M", age_spec = NULL,
                               entry_date_spec = NULL,
                               ignore_plausibility_check = FALSE,
-                              prompt_data_cleanup = TRUE) {
-  original_data <- data
-  data <- prepare_data(data, reference_year, female_spec, male_spec, age_spec,
-                       entry_date_spec, ignore_plausibility_check,
-                       prompt_data_cleanup)
-  results <- estimate_standard_analysis_model(data)
-
-
-  output <- list(original_data = original_data,
-                 clean_data = data,
+                              prompt_data_cleanup = FALSE) {
+  data_original <- data
+  data_prepared <- prepare_data(data, reference_year, female_spec, male_spec,
+                                age_spec, entry_date_spec,
+                                ignore_plausibility_check, prompt_data_cleanup)
+  results <- run_standard_analysis_model(data_prepared$data)
+  output <- list(data_original = data_original,
+                 data_clean = data_prepared$data,
+                 data_errors = data_prepared$errors,
                  results = results)
   class(output) <- "standard_analysis_model"
   output
@@ -60,18 +59,57 @@ standard_analysis <- function(data, reference_year, female_spec = "F",
 #' @export
 summary.standard_analysis_model <- function(object) {
   # Compute Kennedy estimate
-  coef_sexF <- object$results$coefficients[length(object$results$coefficients)]
-  se_sexF   <- summary(object$results)$coefficients[nrow(
+  coef_sex_f <- object$results$coefficients[length(object$results$coefficients)]
+  se_sex_f   <- summary(object$results)$coefficients[nrow(
     summary(object$results)$coefficients), 2]
-  kennedy_estimate <- get_kennedy_estimator(coef_sexF, se_sexF^2)
+  kennedy_estimate <- get_kennedy_estimator(coef_sex_f, se_sex_f^2)
 
-  # Print output
-  cat("\nSummary of the Standard Analysis Model:\n", rep("=", 80), "\n\n",
-      sep = "")
+  # Compute the number of employees total / valid for all, women and men only
+  n_original <- nrow(object$data_original)
+  n_f_original <- sum(object$data_original$sex == "F", na.rm = TRUE)
+  n_m_original <- sum(object$data_original$sex == "M", na.rm = TRUE)
+  n_clean <- nrow(object$data_clean)
+  n_f_clean <- sum(object$data_clean$sex == "F")
+  n_m_clean <- sum(object$data_clean$sex == "M")
+
+  # Significance tests
+  ratings <- c(
+    paste0("The value is not statistically significant. The statistical ",
+           "method does not allow a valid gender effect to be determined."),
+    paste0("The value is statistically significant. The statistical method ",
+           "allows a valid gender effect to be determined."),
+    paste0("The value exceeds 5%, which is statistically significant. The ",
+           "statistical method allows a major, valid gender effect to be ",
+           "determined."))
+  sig_level <- 0.05
+  h0_threshold <- 0.05
+  rating_level <- ifelse(
+    2 * (1 - pt(abs(coef_sex_f) / se_sex_f,
+                df = object$results$df.residual)) > sig_level, 1,
+    ifelse(
+      1 - pt((abs(coef_sex_f) - h0_threshold) / se_sex_f,
+             df = object$results$df.residual) > sig_level, 2, 3))
+
+  # Print standard analysis output
+  cat("\nSummary of the Standard Analysis Model:\n", sep = "")
+  cat(rep("=", 80), "\n\n", sep = "")
+  cat("Number of employees: ", n_original, " of which ", n_f_original,
+      sprintf(" (%.1f%%)", 100 * n_f_original / n_original), " women and ",
+      n_m_original, sprintf(" (%.1f%%)", 100 * n_m_original / n_original),
+      " men.\n", sep = "")
+  cat("Number of employees included in the analysis: ", n_clean, " of which ",
+      n_f_clean, sprintf(" (%.1f%%)", 100 * n_f_clean / n_clean)," women and ",
+      n_m_clean, sprintf(" (%.1f%%)", 100 * n_m_clean / n_clean), " men.\n",
+      rep("-", 80), "\n", sep = "")
   cat("Under otherwise equal circumstances, women earn ",
       sprintf("%.1f%% ", abs(100 * kennedy_estimate)),
       ifelse(kennedy_estimate > 0, "more ", "less "),
-      "than men.\n", rep("-", 80), "\n", sep = "")
-  x <- summary(object$results)
-  cat(rep("-", 80), "\n\n", sep = "")
+      "than men.\n\n", ratings[rating_level], "\n", sep = "")
+  # Print linear regression output
+  invisible(readline(prompt = paste0("Press [enter] to display the summary of ",
+                                     "the linear regression...")))
+  cat("\nSummary of the Linear Regression:\n", sep = "")
+  cat(rep("=", 80), "\n", sep = "")
+  cat(paste0(capture.output(summary(object$results)), sep = "\n"), sep = "")
+  cat("\n\n", sep = "")
 }

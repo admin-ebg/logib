@@ -95,12 +95,12 @@ prepare_data <- function(data, reference_year, female_spec = "F",
                          male_spec = "M", age_spec = NULL,
                          entry_date_spec = NULL,
                          ignore_plausibility_check = FALSE,
-                         prompt_data_cleanup = TRUE) {
+                         prompt_data_cleanup = FALSE) {
   # Make sure the specification parameters are correct
   if (female_spec == male_spec) {
     stop("The 'female_spec' and 'male_spec' arguments must differ.")
   }
-  if (!is.null(age_spec)){
+  if (!is.null(age_spec)) {
     if (!(age_spec %in% c("age", "birthyear", "date_of_birth"))) {
       stop(paste0("The 'age_spec' parameter must be one of 'age', 'birthyear'",
                   ", or 'date_of_birth'"))
@@ -129,15 +129,37 @@ prepare_data <- function(data, reference_year, female_spec = "F",
                          entry_date_spec)
   # Check the data for correctness and plausibility
   errors <- check_data(data)
-  # If all data is correct and plausible, we stop here and return
-  if (nrow(errors) == 0) {
-    return(data)
+  # If all data is correct and plausible, or if we don't want to prompt the data
+  # cleanup method, we stop here and return
+  if (nrow(errors) == 0 | !prompt_data_cleanup) {
+    # If we don't prompt the cleanup, we simply discard all data with an error
+    # code of 1 (incorrect data)
+    invalid_rows <- unique(errors$row[errors$importance == 1])
+    if (length(invalid_rows) > 0) {
+      data <- data[-invalid_rows, ]
+    }
+    implausible_rows <- unique(errors$row[errors$importance == 2])
+    implausible_rows <- setdiff(implausible_rows, invalid_rows)
+
+    if (length(invalid_rows) > 0) {
+      warning(paste0(length(invalid_rows), " observations are " ,
+                     "incorrect and have been discarded. To correct these ",
+                     "observations, set the 'prompt_data_cleanup' parameter ",
+                     "to TRUE."))
+    }
+    if (length(implausible_rows) > 0) {
+      warning(paste0(length(implausible_rows), " observations are ",
+                     "implausible. These observations will be kept in the ",
+                     "analysis. To correct these observations, Set the ",
+                     "'prompt_data_cleanup' parameter to TRUE and the ",
+                     "'ignore_plausibility_check' parameter to FALSE."))
+    }
+    return(list(data = data, errors = errors))
   } else {
     if (ignore_plausibility_check) {
-      errors <- errors[errors$importance == 1, ]
       # If the data is correct but not plausible, we stop here and return
-      if (nrow(errors) == 0) {
-        return(data)
+      if (nrow(errors[errors$importance == 1, ]) == 0) {
+        return(list(data = data, errors = errors))
       }
     }
     # The data is incorrect and/or implausible, we clean up and re-run the whole

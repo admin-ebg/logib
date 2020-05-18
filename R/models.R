@@ -19,7 +19,18 @@
 #' @return an object of \code{\link{class}} "\code{\link[stats]{lm}}"
 #'
 #' @keywords internal
-estimate_standard_analysis_model <- function(data, sex_neutral = FALSE) {
+run_standard_analysis_model <- function(data, sex_neutral = FALSE) {
+  # Throw an error when the minimum requirements for the standard analysis are
+  # not met (i.e. less than 50 employees or less than 1 woman or man)
+  if (nrow(data) < 50) {
+    print(data)
+    stop(paste0("There must be at least 50 valid employees to run the ",
+                "standard analysis model"))
+  }
+  if (abs(sum(data$sex == "F") - sum(data$sex == "M")) == nrow(data)) {
+    stop(paste0("There must be at least 1 woman and 1 man in the valid ",
+                "employees to run the standard analysis model"))
+  }
   # Handle cases where skill level or professional position have 1 level only
   # by simply setting the column to a numeric 0 (thus it will be absorbed by
   # the intercept coefficient)

@@ -89,14 +89,14 @@ compute_years_of_service <- function(x, entry_date_spec = NULL,
       yos <- x
     } else if (entry_date_spec == "entry_year") {
       if (is.null(reference_year)) {
-        stop(paste0("Please specify a 'reference_year' for the years of service ",
-                    "computation."))
+        stop(paste0("Please specify a 'reference_year' for the years of ",
+                    "service computation."))
       }
       yos <- reference_year - x
     } else if (entry_date_spec == "entry_date") {
       if (is.null(reference_year)) {
-        stop(paste0("Please specify a 'reference_year' for the years of service ",
-                    "computation."))
+        stop(paste0("Please specify a 'reference_year' for the years of ",
+                    "service computation."))
       }
       # TODO: Implement YEARFRAC() as in Excel
       # Try to infer the date format

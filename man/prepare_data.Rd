@@ -12,7 +12,7 @@ prepare_data(
   age_spec = NULL,
   entry_date_spec = NULL,
   ignore_plausibility_check = FALSE,
-  prompt_data_cleanup = TRUE
+  prompt_data_cleanup = FALSE
 )
 }
 \arguments{
