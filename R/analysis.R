@@ -25,12 +25,16 @@ standard_analysis <- function(data, reference_year, female_spec = "F",
                               entry_date_spec = NULL,
                               ignore_plausibility_check = FALSE,
                               prompt_data_cleanup = FALSE) {
+  params <- list(reference_year = reference_year, female_spec = female_spec,
+                     male_spec = male_spec, age_spec = age_spec,
+                     entry_date_spec = entry_date_spec)
   data_original <- data
   data_prepared <- prepare_data(data, reference_year, female_spec, male_spec,
                                 age_spec, entry_date_spec,
                                 ignore_plausibility_check, prompt_data_cleanup)
   results <- run_standard_analysis_model(data_prepared$data)
-  output <- list(data_original = data_original,
+  output <- list(params = params,
+                 data_original = data_original,
                  data_clean = data_prepared$data,
                  data_errors = data_prepared$errors,
                  results = results)
@@ -66,8 +70,10 @@ summary.standard_analysis_model <- function(object) {
 
   # Compute the number of employees total / valid for all, women and men only
   n_original <- nrow(object$data_original)
-  n_f_original <- sum(object$data_original$sex == "F", na.rm = TRUE)
-  n_m_original <- sum(object$data_original$sex == "M", na.rm = TRUE)
+  n_f_original <- sum(object$data_original$sex == object$params$female_spec,
+                      na.rm = TRUE)
+  n_m_original <- sum(object$data_original$sex == object$params$male_spec,
+                      na.rm = TRUE)
   n_clean <- nrow(object$data_clean)
   n_f_clean <- sum(object$data_clean$sex == "F")
   n_m_clean <- sum(object$data_clean$sex == "M")
