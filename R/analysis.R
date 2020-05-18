@@ -104,7 +104,7 @@ summary.standard_analysis_model <- function(object) {
   cat("Under otherwise equal circumstances, women earn ",
       sprintf("%.1f%% ", abs(100 * kennedy_estimate)),
       ifelse(kennedy_estimate > 0, "more ", "less "),
-      "than men.\n\n", ratings[rating_level], "\n", sep = "")
+      "than men.\n\n", ratings[rating_level], "\n\n", sep = "")
   # Print linear regression output
   invisible(readline(prompt = paste0("Press [enter] to display the summary of ",
                                      "the linear regression...")))

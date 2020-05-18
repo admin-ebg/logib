@@ -133,7 +133,7 @@ transform_data <- function(data, reference_year, female_spec = "F",
   # At this stage, the specifications must be OK as they are being checked in
   # the prepare_data() function
   data$sex <- factor(data$sex, levels = c(male_spec, female_spec),
-                     labels = c("F", "M"))
+                     labels = c("M", "F"))
   data$skill_level <- factor(data$skill_level)
   data$professional_position <- factor(data$professional_position)
 
