@@ -43,12 +43,11 @@ interpreted as being correct.}
 
 \item{prompt_data_cleanup}{a boolean indicating whether the user wants to be
 prompted regarding incorrect data values. If \code{FALSE}, the analysis will
-run without the incorrect data only.
-
-TODO:}
+run without the incorrect data only.}
 }
 \value{
-???
+a data.frame which has no incorrect rows left and can be used to
+estimate the standard analysis model
 }
 \description{
 Prepares a dataframe for the analysis in three steps:
@@ -59,4 +58,4 @@ Prepares a dataframe for the analysis in three steps:
   \item{Check each row of the dataframe for correctness and plausibility}
 }
 }
-\keyword{???}
+\keyword{internal}

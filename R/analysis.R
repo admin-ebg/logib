@@ -29,7 +29,7 @@
 #' @param prompt_data_cleanup a boolean indicating whether a prompt will pop up
 #' to enforce cleaning the data until all data is correct
 #'
-#' @return object of type \code{standard_analysis_model} with the following
+#' @return object of type \code{analysis_model} with the following
 #' elements
 #' \itemize{
 #'    \item{\code{params}: }{The set of original parameters passed to the
@@ -48,7 +48,7 @@
 #' TODO: add examples
 #'
 #' @export
-standard_analysis <- function(data, reference_year, female_spec = "F",
+analysis <- function(data, reference_year, female_spec = "F",
                               male_spec = "M", age_spec = NULL,
                               entry_date_spec = NULL,
                               ignore_plausibility_check = FALSE,
@@ -66,7 +66,7 @@ standard_analysis <- function(data, reference_year, female_spec = "F",
                  data_clean = data_prepared$data,
                  data_errors = data_prepared$errors,
                  results = results)
-  class(output) <- "standard_analysis_model"
+  class(output) <- "analysis_model"
   output
 
 }
@@ -74,16 +74,16 @@ standard_analysis <- function(data, reference_year, female_spec = "F",
 #' Summary of the Salary Analysis
 #'
 #' Summary of an estimated salary analysis object of class
-#' \code{standard_analysis_model}
+#' \code{analysis_model}
 #'
-#' \code{summary.standard_analysis_model} provides a short summary of the wage
+#' \code{summary.analysis_model} provides a short summary of the wage
 #' analysis according to the Standard Analysis Model. The summary describes the
 #' number of records used for the analysis, the Kennedy estimate of the wage
 #' difference under otherwise equal circumstances and the summary of the linear
 #' regression.
 #'
 #' @param object estimated salary analysis object of class
-#' \code{standard_analysis_model}
+#' \code{analysis_model}
 #'
 #' @examples
 #' # Estimate standard analysis model
@@ -93,7 +93,7 @@ standard_analysis <- function(data, reference_year, female_spec = "F",
 #' summary(result)
 #'
 #' @export
-summary.standard_analysis_model <- function(object) {
+summary.analysis_model <- function(object) {
   # Compute Kennedy estimate
   coef_sex_f <- object$results$coefficients[length(object$results$coefficients)]
   se_sex_f   <- summary(object$results)$coefficients[nrow(

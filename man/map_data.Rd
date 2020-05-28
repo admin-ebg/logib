@@ -12,9 +12,8 @@ map_data(data, data_origin = "datalist", custom_map = NULL)
 \item{data_origin}{a string indicating the origin of the data, can be one of
 \code{datalist}, \code{data_export}, or \code{custom}}
 
-\item{custom_map}{TODO: Explain column_mapping
-TODO: How is the column mapping to be defined? As a list or rather as
-parameters?}
+\item{custom_map}{a character vector as produced by
+\code{build_custom_mapping}}
 }
 \value{
 a data.frame with the column names as used in the code
@@ -24,6 +23,9 @@ a data.frame with the column names as used in the code
 used in the salary analysis.
 }
 \details{
-TODO: A longer description of what is being done exactly.
+Renames the columns a data.frame to the column names used in the standard
+analysis model. The mapping is based either on the origin of the data (i.e.
+official datalist or data export from the webtool) or using a custom map
+as produced by \code{build_custom_mapping}
 }
 \keyword{internal}

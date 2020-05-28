@@ -19,13 +19,18 @@ user for the exact mapping of his dataframe or whether the columns are
 mapped automatically by order}
 }
 \value{
-TODO: Oh boy... a vector of column names indexed by column names... make
-that clear
+A named vector of characters, where the name indicates the column name in the
+original data.frame and the value indicates the column name as used by the
+standard analysis model.
 }
 \description{
 \code{build_custom_mapping} creates a vector of column name mappings for the
 user to read her or his custom dataframe
 }
 \details{
-TODO: A longer description of what is being done.
+Builds a mapping from the custom column names of a given data.frame to the
+variable names used in the standard analysis model. If \code{prompt_mapping}
+is set to \code{TRUE}, the function prompts the mapping for each column
+of the data.frame. If \code{prompt_mapping} is set to \code{FALSE}, the
+mapping is built using the order of the columns of the given data.frame.
 }

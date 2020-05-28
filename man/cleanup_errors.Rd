@@ -21,6 +21,8 @@ interpreted as being correct.}
 a dataframe of the original data with cleaned up errors
 }
 \description{
-TODO: Description
+\code{cleanup_errors} launches a step-by-step cleanup prompt which goes
+over all incorrect rows found in the data (as discovered by
+\code{check_data})
 }
 \keyword{internal}

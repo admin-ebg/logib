@@ -149,7 +149,7 @@ prepare_data <- function(data, reference_year, female_spec = "F",
 
     if (length(invalid_rows) > 0) {
       warning(paste0(length(invalid_rows), " observations are ",
-                     "incorrect and have been discarded. To correct these ",
+                     "invalid and have been discarded. To correct these ",
                      "observations, set the 'prompt_data_cleanup' parameter ",
                      "to TRUE."))
     }

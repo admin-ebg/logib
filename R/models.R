@@ -23,7 +23,6 @@ run_standard_analysis_model <- function(data, sex_neutral = FALSE) {
   # Throw an error when the minimum requirements for the standard analysis are
   # not met (i.e. less than 50 employees or less than 1 woman or man)
   if (nrow(data) < 50) {
-    print(data)
     stop(paste0("There must be at least 50 valid employees to run the ",
                 "standard analysis model"))
   }

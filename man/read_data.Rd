@@ -5,7 +5,7 @@
 \title{Create the dataframe object used for the standard analysis model}
 \usage{
 read_data(
-  data_path,
+  data_path = NULL,
   custom_data = NULL,
   prompt_mapping = TRUE,
   language = "de"

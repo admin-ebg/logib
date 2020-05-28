@@ -7,11 +7,11 @@
 check_data(data)
 }
 \arguments{
-\item{data}{data.frame to be checked
-TODO : What's to be returned?}
+\item{data}{data.frame to be checked}
 }
 \value{
-TODO
+a data.frame with information concerning each incorrect data point
+in the \code{data} data.frame
 }
 \description{
 \code{check_data} checks a dataframe (as produced by
