@@ -7,8 +7,9 @@
 #' for correctness and consistency)
 #'
 #' @param data data.frame to be checked
-#' TODO : What's to be returned?
-#' @return TODO
+#'
+#' @return a data.frame with information concerning each incorrect data point
+#' in the \code{data} data.frame
 #'
 #' @keywords internal
 #'
@@ -60,7 +61,6 @@ check_data <- function(data) {
                   build_errors(error_rows, data$personal_number[error_rows],
                                data$age[error_rows], "age",
                                "'Age' is not between 15 and 70", 2))
-
   # Check for incorrect sex (neither F nor M)
   error_rows <- as.numeric(idx[!(data$sex %in% c("F", "M"))])
   errors <- rbind(errors,
@@ -84,7 +84,6 @@ check_data <- function(data) {
                                data$years_of_service[error_rows],
                                "years_of_service",
                                "'Years of service' is more than 55", 2))
-
   # Check for wrong training/education values
   error_rows <- as.numeric(idx[!(data$training %in% 1:8)])
   errors <- rbind(errors,
@@ -93,21 +92,38 @@ check_data <- function(data) {
                                "training", "'Training' is not between 1 and 8",
                                1))
   # Check for FTE limits (0 - 150% or 0 - 300 hours)
-  # TODO: Ugh
-  error_rows <- idx[]
-
+  error_rows <- idx[data$activity_rate > 150 | data$activity_rate < 0]
+  errors <- rbind(errors,
+                  build_errors(error_rows, data$personal_number[error_rows],
+                               data$activity_rate[error_rows], "activity_rate",
+                               "'Activity rate' is not between 0% and 150%", 1))
+  error_rows <- idx[data$activity_rate > 100 & data$activity_rate <= 150]
+  errors <- rbind(errors,
+                  build_errors(error_rows, data$personal_number[error_rows],
+                               data$activity_rate[error_rows], "activity_rate",
+                               "'Activity rate' is above 100%", 2))
+  error_rows <- idx[data$paid_hours > 300 | data$paid_hours < 0]
+  errors <- rbind(errors,
+                  build_errors(error_rows, data$personal_number[error_rows],
+                               data$paid_hours[error_rows], "paid_hours",
+                               "'Paid hours' is not between 0 and 300", 1))
+  error_rows <- idx[data$paid_hours >= 220 & data$paid_hours <= 300]
+  errors <- rbind(errors,
+                  build_errors(error_rows, data$personal_number[error_rows],
+                               data$paid_hours[error_rows], "paid_hours",
+                               "'Paid hours' is more than 220", 2))
   # Check for non-positive basic wage
   error_rows <- as.numeric(idx[data$basic_wage < 0])
   errors <- rbind(errors,
                   build_errors(error_rows, data$personal_number[error_rows],
                                data$basic_wage[error_rows], "basic_wage",
                                "'Basic wage' is negative", 1))
-  error_rows <- as.numeric(idx[data$basic_wage == 0])
+  error_rows <- as.numeric(idx[data$basic_wage == 0 & (data$activity_rate > 0 |
+                                                         data$paid_hours > 0)])
   errors <- rbind(errors,
                   build_errors(error_rows, data$personal_number[error_rows],
                                data$basic_wage[error_rows], "basic_wage",
                                "'Basic wage' is zero", 1))
-  # TODO: 0 basic wage is OK when FTE is also zero ?
   # Check for negative allowances
   error_rows <- as.numeric(idx[data$allowances < 0])
   errors <- rbind(errors,
@@ -200,7 +216,9 @@ build_errors <- function(rows, pers_id, vals, column, description, importance) {
 
 #' Cleanup data errors
 #'
-#' TODO: Description
+#' \code{cleanup_errors} launches a step-by-step cleanup prompt which goes
+#' over all incorrect rows found in the data (as discovered by
+#' \code{check_data})
 #'
 #' @param data a dataframe of the original data, i.e. the data to which the
 #' \code{errors} parameter refers to

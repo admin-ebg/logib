@@ -3,7 +3,11 @@
 #' \code{build_custom_mapping} creates a vector of column name mappings for the
 #' user to read her or his custom dataframe
 #'
-#' TODO: A longer description of what is being done.
+#' Builds a mapping from the custom column names of a given data.frame to the
+#' variable names used in the standard analysis model. If \code{prompt_mapping}
+#' is set to \code{TRUE}, the function prompts the mapping for each column
+#' of the data.frame. If \code{prompt_mapping} is set to \code{FALSE}, the
+#' mapping is built using the order of the columns of the given data.frame.
 #'
 #' @param data the custom dataframe for which the user wants to build a custom
 #' mapping
@@ -15,8 +19,9 @@
 #' mapped automatically by order
 #'
 #' @return
-#' TODO: Oh boy... a vector of column names indexed by column names... make
-#' that clear
+#' A named vector of characters, where the name indicates the column name in the
+#' original data.frame and the value indicates the column name as used by the
+#' standard analysis model.
 #'
 #' @export
 build_custom_mapping <- function(data, language = "de", prompt_mapping = TRUE) {
@@ -32,12 +37,13 @@ build_custom_mapping <- function(data, language = "de", prompt_mapping = TRUE) {
     choices <- c("DO NOT MAP THIS COLUMN.", choices)
     custom_map <- c()
     for (col in names(data)) {
-      x <- menu(choices,
+      x <- utils::menu(choices,
                 title = paste0("Please choose the corresponding column for '",
                                col, "'."))
       # Save choice and update as to not map the same column twice
       if (x != 1) {
         custom_map <- c(custom_map, col_code[x - 1])
+        col_code <- col_code[- (x - 1)]
         names(custom_map)[length(custom_map)] <- col
         choices <- choices[-x]
       }
@@ -87,10 +93,10 @@ build_custom_mapping <- function(data, language = "de", prompt_mapping = TRUE) {
 #' prompted regarding incorrect data values. If \code{FALSE}, the analysis will
 #' run without the incorrect data only.
 #'
-#' TODO:
-#' @return ???
+#' @return a data.frame which has no incorrect rows left and can be used to
+#' estimate the standard analysis model
 #'
-#' @keywords ???
+#' @keywords internal
 prepare_data <- function(data, reference_year, female_spec = "F",
                          male_spec = "M", age_spec = NULL,
                          entry_date_spec = NULL,
@@ -108,7 +114,7 @@ prepare_data <- function(data, reference_year, female_spec = "F",
   }
   if (!is.null(entry_date_spec)) {
     if (!(entry_date_spec %in% c("years", "entry_year", "entry_date"))) {
-      stop(pate0("The 'entry_date_spec' parameter must be one of 'years', ",
+      stop(paste0("The 'entry_date_spec' parameter must be one of 'years', ",
                  "'entry_years', or 'entry_date'."))
     }
   }
@@ -142,7 +148,7 @@ prepare_data <- function(data, reference_year, female_spec = "F",
     implausible_rows <- setdiff(implausible_rows, invalid_rows)
 
     if (length(invalid_rows) > 0) {
-      warning(paste0(length(invalid_rows), " observations are " ,
+      warning(paste0(length(invalid_rows), " observations are ",
                      "incorrect and have been discarded. To correct these ",
                      "observations, set the 'prompt_data_cleanup' parameter ",
                      "to TRUE."))

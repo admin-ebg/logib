@@ -42,11 +42,11 @@ run_standard_analysis_model <- function(data, sex_neutral = FALSE) {
   }
   # Run and return the linear regression according to the sex_neutral parameter
   if (sex_neutral) {
-    lm(log(standardized_salary) ~ years_of_training + years_of_service +
+    stats::lm(log(standardized_salary) ~ years_of_training + years_of_service +
          years_of_earning + years_of_earning2 + skill_level +
          professional_position, data = data)
   } else {
-    lm(log(standardized_salary) ~ years_of_training + years_of_service +
+    stats::lm(log(standardized_salary) ~ years_of_training + years_of_service +
          years_of_earning + years_of_earning2 + skill_level +
          professional_position + sex, data = data)
   }

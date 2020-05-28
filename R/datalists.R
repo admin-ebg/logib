@@ -32,7 +32,7 @@ download_datalist <- function(file, language = "de") {
                 "datalist_v3-1.xlsx.download.xlsx/Datalist_",
                 substr(language, 1, 1), ".xlsx")
 
-  download.file(url, file, mode = "wb")
+  utils::download.file(url, file, mode = "wb")
 }
 
 #' Read official datalist or data_export Excel file
@@ -40,7 +40,7 @@ download_datalist <- function(file, language = "de") {
 #' Reads an official datalist or data_export file into a dataframe object.
 #'
 #' @param path a character string indicating the path of the Excel file to be
-#' read
+#'   read
 #'
 #' @return a dataframe with the contents of the datalist or data_export
 #'

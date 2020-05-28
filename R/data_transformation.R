@@ -137,9 +137,9 @@ transform_data <- function(data, reference_year, female_spec = "F",
   data$skill_level <- factor(data$skill_level)
   data$professional_position <- factor(data$professional_position)
 
-  # Transform NA salary components to zero
+  # Transform NA salary components and workload components to zero
   for (col in c("basic_wage", "allowances", "monthly_wage_13",
-                "special_payments")) {
+                "special_payments", "activity_rate", "paid_hours")) {
     data[is.na(data[, col]), col] <- 0
   }
   # Compute age and years of service given the specifications

@@ -2,16 +2,44 @@
 #'
 #' Runs a salary analysis according to the Swiss standard analysis model
 #'
-#' @param
-#' TODO: specify params
+#' @param data a data.frame of employees as produced by \code{read_data}
+#' @param reference_year an integer representing the reference year, i.e. the
+#' year for which we analyse the salaries
+#' @param female_spec an optional string or numeric representing the way women
+#' are encoded in the \code{data}
+#' @param male_spec an optional string or numeric representing the way men are
+#' encoded in the \code{data}
+#' @param age_spec an optional string to specify the way \code{age} is encoded
+#' in the data (\code{NULL} will try to automatically infer the age format,
+#' \code{"age"} implies that the \code{age} is specified as the age of a person,
+#' \code{"birthyear"} implies that the \code{age} is specified as the year of
+#' birth of a person, and \code{"birthdate"} implies that the \code{age} is
+#' specified as the date of birth of a person)
+#' @param entry_date_spec an optional string to specify the way
+#' \code{entry_date} is encoded in the data (\code{NULL} will try to
+#' automatically infer the format, \code{"years"} implies that the
+#' \code{entry_date} is specified as the number of years for which the person
+#' has been in the company, \code{"entry_year"} implies that the
+#' \code{entry_date} is specified as the year of the entry date of the person,
+#' \code{"entry_date"} implies that the age is specified as the date of entry
+#' of the person)
+#' @param ignore_plausibility_check a boolean indicating whether the
+#' plausibility of the data should be checked or whether all correct data is
+#' considered plausible
+#' @param prompt_data_cleanup a boolean indicating whether a prompt will pop up
+#' to enforce cleaning the data until all data is correct
 #'
 #' @return object of type \code{standard_analysis_model} with the following
 #' elements
 #' \itemize{
-#'    \item{\code{original_data}: }{The original data passed by the user in the
+#'    \item{\code{params}: }{The set of original parameters passed to the
+#'    function}
+#'    \item{\code{data_original}: }{The original data passed by the user in the
 #'    \code{data} parameter}
-#'    \item{\code{clean_data}: }{The cleaned up data which was used for the
+#'    \item{\code{data_clean}: }{The cleaned up data which was used for the
 #'    analysis}
+#'    \item{\code{data_errors}: }{The list of errors which were found upon
+#'    checking the data}
 #'    \item{\code{results}: }{The result of the standard analysis model}
 #'
 #' }
@@ -48,7 +76,11 @@ standard_analysis <- function(data, reference_year, female_spec = "F",
 #' Summary of an estimated salary analysis object of class
 #' \code{standard_analysis_model}
 #'
-#' TODO: Description
+#' \code{summary.standard_analysis_model} provides a short summary of the wage
+#' analysis according to the Standard Analysis Model. The summary describes the
+#' number of records used for the analysis, the Kennedy estimate of the wage
+#' difference under otherwise equal circumstances and the summary of the linear
+#' regression.
 #'
 #' @param object estimated salary analysis object of class
 #' \code{standard_analysis_model}
@@ -90,10 +122,10 @@ summary.standard_analysis_model <- function(object) {
   sig_level <- 0.05
   h0_threshold <- 0.05
   rating_level <- ifelse(
-    2 * (1 - pt(abs(coef_sex_f) / se_sex_f,
+    2 * (1 - stats::pt(abs(coef_sex_f) / se_sex_f,
                 df = object$results$df.residual)) > sig_level, 1,
     ifelse(
-      1 - pt((abs(coef_sex_f) - h0_threshold) / se_sex_f,
+      1 - stats::pt((abs(coef_sex_f) - h0_threshold) / se_sex_f,
              df = object$results$df.residual) > sig_level, 2, 3))
 
   # Print standard analysis output
@@ -104,7 +136,7 @@ summary.standard_analysis_model <- function(object) {
       n_m_original, sprintf(" (%.1f%%)", 100 * n_m_original / n_original),
       " men.\n", sep = "")
   cat("Number of employees included in the analysis: ", n_clean, " of which ",
-      n_f_clean, sprintf(" (%.1f%%)", 100 * n_f_clean / n_clean)," women and ",
+      n_f_clean, sprintf(" (%.1f%%)", 100 * n_f_clean / n_clean), " women and ",
       n_m_clean, sprintf(" (%.1f%%)", 100 * n_m_clean / n_clean), " men.\n",
       rep("-", 80), "\n", sep = "")
   cat("Under otherwise equal circumstances, women earn ",
@@ -116,6 +148,7 @@ summary.standard_analysis_model <- function(object) {
                                      "the linear regression...")))
   cat("\nSummary of the Linear Regression:\n", sep = "")
   cat(rep("=", 80), "\n", sep = "")
-  cat(paste0(capture.output(summary(object$results)), sep = "\n"), sep = "")
+  cat(paste0(utils::capture.output(summary(object$results)), sep = "\n"),
+      sep = "")
   cat("\n\n", sep = "")
 }
