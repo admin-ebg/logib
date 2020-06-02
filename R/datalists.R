@@ -106,7 +106,7 @@ read_data <- function(data_path = NULL, custom_data = NULL, prompt_mapping = TRU
   } else {
     custom_map <- build_custom_mapping(custom_data, language, prompt_mapping)
     # Drop all columns which aren't used in the custom map and map the data
-    data <- data[, names(data) %in% names(custom_map)]
+    data <- custom_data[, names(custom_data) %in% names(custom_map)]
     names(data) <- custom_map[names(data)]
     data
   }
