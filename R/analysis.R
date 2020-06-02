@@ -3,6 +3,8 @@
 #' Runs a salary analysis according to the Swiss standard analysis model
 #'
 #' @param data a data.frame of employees as produced by \code{read_data}
+#' @param reference_month an integer representing the reference month, i.e. the
+#' month for which we analyse the salaries
 #' @param reference_year an integer representing the reference year, i.e. the
 #' year for which we analyse the salaries
 #' @param female_spec an optional string or numeric representing the way women
@@ -48,18 +50,19 @@
 #' TODO: add examples
 #'
 #' @export
-analysis <- function(data, reference_year, female_spec = "F",
-                              male_spec = "M", age_spec = NULL,
-                              entry_date_spec = NULL,
-                              ignore_plausibility_check = FALSE,
-                              prompt_data_cleanup = FALSE) {
-  params <- list(reference_year = reference_year, female_spec = female_spec,
-                     male_spec = male_spec, age_spec = age_spec,
-                     entry_date_spec = entry_date_spec)
+analysis <- function(data, reference_month, reference_year, female_spec = "F",
+                     male_spec = "M", age_spec = NULL, entry_date_spec = NULL,
+                     ignore_plausibility_check = FALSE,
+                     prompt_data_cleanup = FALSE) {
+  params <- list(reference_month = reference_month,
+                 reference_year = reference_year, female_spec = female_spec,
+                 male_spec = male_spec, age_spec = age_spec,
+                 entry_date_spec = entry_date_spec)
   data_original <- data
-  data_prepared <- prepare_data(data, reference_year, female_spec, male_spec,
-                                age_spec, entry_date_spec,
-                                ignore_plausibility_check, prompt_data_cleanup)
+  data_prepared <- prepare_data(data, reference_month, reference_year,
+                                female_spec, male_spec, age_spec,
+                                entry_date_spec, ignore_plausibility_check,
+                                prompt_data_cleanup)
   results <- run_standard_analysis_model(data_prepared$data)
   output <- list(params = params,
                  data_original = data_original,

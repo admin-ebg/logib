@@ -31,6 +31,10 @@ build_custom_mapping <- function(data, language = "de", prompt_mapping = TRUE) {
   }
   col_code <- all_column_names[["code"]]
   col_datalist <- gsub("\r\n", " ", all_column_names[["datalist"]][[language]])
+  # Make sure the data has headers
+  if (is.null(names(data))) {
+    names(data) <- paste0("column_", 1:ncol(test_data))
+  }
   if (prompt_mapping) {
     # Prompt the user to map the column of her or his file one by one
     choices <- paste0(col_code, " - [", col_datalist, "]")
@@ -73,6 +77,8 @@ build_custom_mapping <- function(data, language = "de", prompt_mapping = TRUE) {
 #'
 #' @param data a dataframe object as produced by \code{read_data} which is to
 #' be used in the analysis
+#' @param reference_month a number indicating the reference month of the
+#' analysis
 #' @param reference_year a number indicating the reference year of the analysis
 #' @param female_spec a string or number indicating the way females are
 #' specified in the dataset.
@@ -97,12 +103,15 @@ build_custom_mapping <- function(data, language = "de", prompt_mapping = TRUE) {
 #' estimate the standard analysis model
 #'
 #' @keywords internal
-prepare_data <- function(data, reference_year, female_spec = "F",
-                         male_spec = "M", age_spec = NULL,
+prepare_data <- function(data, reference_month, reference_year,
+                         female_spec = "F", male_spec = "M", age_spec = NULL,
                          entry_date_spec = NULL,
                          ignore_plausibility_check = FALSE,
                          prompt_data_cleanup = FALSE) {
   # Make sure the specification parameters are correct
+  if (!(reference_month %in% 1:12)) {
+    stop("The 'reference_month' must be an integer between 1 and 12.")
+  }
   if (female_spec == male_spec) {
     stop("The 'female_spec' and 'male_spec' arguments must differ.")
   }
