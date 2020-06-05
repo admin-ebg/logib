@@ -130,6 +130,9 @@ summary.analysis_model <- function(object) {
     ifelse(
       1 - stats::pt((abs(coef_sex_f) - h0_threshold) / se_sex_f,
              df = object$results$df.residual) > sig_level, 2, 3))
+  # Infer the print size for methodology metrics from the degrees of freedom
+  np <- ceiling(log(object$results$df.residual, 10))
+
 
   # Print standard analysis output
   cat("\nSummary of the Standard Analysis Model:\n", sep = "")
@@ -146,12 +149,46 @@ summary.analysis_model <- function(object) {
       sprintf("%.1f%% ", abs(100 * kennedy_estimate)),
       ifelse(kennedy_estimate > 0, "more ", "less "),
       "than men.\n\n", ratings[rating_level], "\n\n", sep = "")
-  # Print linear regression output
-  invisible(readline(prompt = paste0("Press [enter] to display the summary of ",
-                                     "the linear regression...")))
-  cat("\nSummary of the Linear Regression:\n", sep = "")
-  cat(rep("=", 80), "\n", sep = "")
-  cat(paste0(utils::capture.output(summary(object$results)), sep = "\n"),
-      sep = "")
-  cat("\n\n", sep = "")
+  cat(rep("-", 80), "\n\n", sep = "")
+  # Print methodology metrics
+  cat("Methodology Metrics:\n", sep = "")
+  cat(rep("=", 80), "\n\n", sep = "")
+  cat("Regression results\n", sep = "")
+  cat(rep("-", 80), "\n", sep = "")
+  cat(sprintf(paste0("%-48s: %", np + 4, ".3f\n"), "Gender coefficient",
+                     coef_sex_f), sep = "")
+  cat(sprintf(paste0("%-48s: %", np + 4, ".3f\n"),
+                     "Standard error of the gender coefficient", se_sex_f),
+              sep = "")
+  cat(sprintf(paste0("%-48s: %", np, "d\n"), "Degrees of freedom",
+              object$results$df.residual), sep = "")
+  cat(sprintf(paste0("%-48s: %", np + 4, ".3f\n\n"), "R-squared",
+              summary(object$results)$r.squared))
+  cat(paste0("Test to see whether the wage difference differs significantly ",
+             "from zero\n"), sep = "")
+  cat(rep("-", 80), "\n", sep = "")
+  cat("H0: Wage diff. = 0%; HA: Wage diff. <> 0%\n", sep = "")
+  cat(sprintf(paste0("%-48s: %", np + 4, ".3f\n"), "Critical t-value",
+              stats::qt(.975, object$results$df.residual)))
+  cat("(Alpha = 5%, two-sided, N = degrees of freedom)\n", sep = "")
+  cat(sprintf(paste0("%-48s: %", np + 4, ".3f\n"), "Test statistic t",
+              stats::qt(stats::pt(abs(coef_sex_f) / se_sex_f,
+                                  object$results$df.residual),
+                        object$results$df.residual)), sep = "")
+  cat(sprintf("%-48s: %s\n\n", "Significance", ifelse(rating_level == 1, "No",
+                                                   "Yes")))
+  cat(paste0("Test to see whether the wage difference significantly exceeds ",
+             "the tolerance threshold\n"), sep = "")
+  cat(rep("-", 80), "\n", sep = "")
+  # TODO: Add "to the detriment of men/women"
+  cat("H0: Wage diff. = 5%; HA: Wage diff. > 5%\n", sep = "")
+  cat(sprintf(paste0("%-48s: %", np + 4, ".3f\n"), "Critical t-value",
+              stats::qt(.95, object$results$df.residual)))
+  cat("(Alpha = 5%, one-sided, N = degrees of freedom)\n", sep = "")
+  cat(sprintf(paste0("%-48s: %", np + 4, ".3f\n"), "Test statistic t",
+              stats::qt(stats::pt((abs(coef_sex_f) - h0_threshold) / se_sex_f,
+                                  object$results$df.residual),
+                        object$results$df.residual)), sep = "")
+  cat(sprintf("%-48s: %s\n\n", "Significance", ifelse(rating_level == 3, "Yes",
+                                                       "No")))
 }
