@@ -6,6 +6,7 @@
 \usage{
 prepare_data(
   data,
+  reference_month,
   reference_year,
   female_spec = "F",
   male_spec = "M",
@@ -18,6 +19,9 @@ prepare_data(
 \arguments{
 \item{data}{a dataframe object as produced by \code{read_data} which is to
 be used in the analysis}
+
+\item{reference_month}{a number indicating the reference month of the
+analysis}
 
 \item{reference_year}{a number indicating the reference year of the analysis}
 

@@ -6,6 +6,7 @@
 \usage{
 analysis(
   data,
+  reference_month,
   reference_year,
   female_spec = "F",
   male_spec = "M",
@@ -17,6 +18,9 @@ analysis(
 }
 \arguments{
 \item{data}{a data.frame of employees as produced by \code{read_data}}
+
+\item{reference_month}{an integer representing the reference month, i.e. the
+month for which we analyse the salaries}
 
 \item{reference_year}{an integer representing the reference year, i.e. the
 year for which we analyse the salaries}

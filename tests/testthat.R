@@ -1,4 +1,4 @@
 library(testthat)
-library(salaryAnalysis)
+library(logib)
 
-test_check("salaryAnalysis")
+test_check("logib")
