@@ -105,7 +105,7 @@ compute_years_of_service <- function(x, entry_date_spec = NULL,
       ref_date <- as.Date(paste0(reference_year, "-", reference_month, "-01"))
       # Infer date format and compute YEARFRAC as in Excel
       x <- lubridate::parse_date_time(x, orders = c("dmy", "mdy", "ymd"))
-      yos <- sapply(x, function(y) { yearfrac(y, ref_date) })
+      yos <- sapply(x, function(y) yearfrac(y, ref_date))
     }
   }
   yos

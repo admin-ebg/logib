@@ -4,7 +4,12 @@
 \alias{compute_years_of_service}
 \title{Compute years_of_service value}
 \usage{
-compute_years_of_service(x, entry_date_spec = NULL, reference_year = NULL)
+compute_years_of_service(
+  x,
+  entry_date_spec = NULL,
+  reference_year = NULL,
+  reference_month = NULL
+)
 }
 \arguments{
 \item{x}{a string or number vector to be transformed}
@@ -15,8 +20,12 @@ be one of \code{NULL}, \code{"years"}, \code{"entry_year"}, or
 automatically tries to infers the specification}
 
 \item{reference_year}{a number indicating the reference year in order to
-compute the age from a birthyear or birthdate. If \code{entry_date_spec} is
+compute the years of service from an entry date. If \code{entry_date_spec} is
 \code{"years"}, this parameter can be ignored.}
+
+\item{reference_month}{a number indicating the reference month in order to
+compute the years of service from an entry date. If \code{entry_date_spec} is
+\code{"years"} or \code{"entry_years"}, this parameter can be ignored.}
 }
 \value{
 a numeric vector of years of service

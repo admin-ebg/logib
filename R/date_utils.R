@@ -84,7 +84,7 @@ yearfrac <- function(date1, date2) {
   yr1 <- lubridate::year(date1)
   yr2 <- lubridate::year(date2)
   if (within_a_year(date1, date2)) {
-    if((yr1 == yr2) & lubridate::leap_year(date1)) {
+    if ((yr1 == yr2) & lubridate::leap_year(date1)) {
       year_len <- 366
     } else if (feb29_between(date1, date2)) {
       year_len <- 366

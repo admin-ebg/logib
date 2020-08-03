@@ -93,8 +93,8 @@ read_official_excel <- function(path) {
 #' @return a dataframe which can be used to compute the standard analysis model
 #'
 #' @export
-read_data <- function(data_path = NULL, custom_data = NULL, prompt_mapping = TRUE,
-                      language = "de") {
+read_data <- function(data_path = NULL, custom_data = NULL,
+                      prompt_mapping = TRUE, language = "de") {
   if (is.null(data_path) & is.null(custom_data)) {
     stop("At least one of 'data_path' and 'custom_data' must not be NULL")
   }
