@@ -60,14 +60,18 @@ compute_age <- function(x, age_spec = NULL, reference_year = NULL) {
 #' \code{"entry_date"}. If this parameter is set to \code{NULL}, the function
 #' automatically tries to infers the specification
 #' @param reference_year a number indicating the reference year in order to
-#' compute the age from a birthyear or birthdate. If \code{entry_date_spec} is
+#' compute the years of service from an entry date. If \code{entry_date_spec} is
 #' \code{"years"}, this parameter can be ignored.
+#' @param reference_month a number indicating the reference month in order to
+#' compute the years of service from an entry date. If \code{entry_date_spec} is
+#' \code{"years"} or \code{"entry_years"}, this parameter can be ignored.
 #'
 #' @return a numeric vector of years of service
 #'
 #' @keywords internal
 compute_years_of_service <- function(x, entry_date_spec = NULL,
-                                     reference_year = NULL) {
+                                     reference_year = NULL,
+                                     reference_month = NULL) {
   if (is.null(entry_date_spec)) {
     if (is.numeric(x)) {
       # If x is numeric, it must be either years or entry_year
@@ -98,10 +102,10 @@ compute_years_of_service <- function(x, entry_date_spec = NULL,
         stop(paste0("Please specify a 'reference_year' for the years of ",
                     "service computation."))
       }
-      # TODO: Implement YEARFRAC() as in Excel
-      # Try to infer the date format
-      yos <- reference_year - lubridate::year(
-        lubridate::parse_date_time(x, orders = c("dmy", "mdy", "ymd")))
+      ref_date <- as.Date(paste0(reference_year, "-", reference_month, "-01"))
+      # Infer date format and compute YEARFRAC as in Excel
+      x <- lubridate::parse_date_time(x, orders = c("dmy", "mdy", "ymd"))
+      yos <- sapply(x, function(y) { yearfrac(y, ref_date) })
     }
   }
   yos
