@@ -40,18 +40,39 @@ download_datalist <- function(file, language = "de") {
 #'
 #' @keywords internal
 read_official_excel <- function(path) {
-  data <- readxl::read_excel(path)
   col_code <- all_column_names[["code"]]
+  # If the file has 1 sheet it should be a datalist, if it has 3 it should be an
+  # export file, otherwise halt the process
+  n_sheets <- length(readxl::excel_sheets(path))
+  if (n_sheets == 1) {
+    data <- readxl::read_excel(path)
+    data_origin <- "datalist"
+  } else if (n_sheets == 3) {
+    data <- readxl::read_excel(path, sheet = 3)
+    data_origin <- "data_export"
+  } else {
+    stop("The chosen file does not match any of the official files.")
+  }
   # Make sure the columns correspond to that of an official Excel
-  for (data_origin in c("datalist", "data_export")) {
-    for (lang in c("de", "en", "fr", "it")) {
-      col_data <- all_column_names[[data_origin]][[lang]]
-      if (length(names(data)) == length(col_data)) {
-        if (all(names(data) == col_data)) {
-          # Map column names to the 'code' names and return the dataframe
-          names(data) <- col_code
-          return(data.frame(data))
+  for (lang in c("de", "en", "fr", "it")) {
+    col_data <- all_column_names[[data_origin]][[lang]]
+    if (length(names(data)) == length(col_data)) {
+      if (all(names(data) == col_data)) {
+        # Map column names to the 'code' names and return the dataframe
+        names(data) <- col_code
+        # Transform specific columns to numerical values for the Exportfile
+        if (data_origin == "data_export") {
+          data <- data[, 1:23]
+          for (col_name in c("age", "years_of_service", "training",
+                             "skill_level", "professional_position",
+                             "activity_rate", "paid_hours", "basic_wage",
+                             "allowances", "monthly_wage_13",
+                             "special_payments", "weekly_hours",
+                             "annual_hours", "population")) {
+            data[, col_name] <- as.numeric(unlist(data[, col_name]))
+          }
         }
+        return(data.frame(data))
       }
     }
   }
