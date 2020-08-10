@@ -22,7 +22,8 @@ library(logib)
 # ------------------------------------------------------------------------------
 # Variant 1: Using an official datalist or exportfile
 
-# Indicate path to the pre-filled datalist (see 'Further Resources' below)
+# Indicate path to the pre-filled datalist or exportfile 
+# (see 'Further Resources' below)
 path_to_my_data <- "path/to/my/datalist_or_exportfile.xlsx"
 # Read the data from an official datalist to R
 my_data <- read_data(data_path = path_to_my_data)
