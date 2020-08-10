@@ -29,3 +29,10 @@
 #'   \item{supplement4}{additional remarks (4 of 5)},
 #'   \item{supplement5}{additional remarks (5 of 5)}}
 "datalist_imprimerie"
+
+
+#' Column names
+#'
+#' List of column names used in the code, from the datalist and exportfiles
+#' in all four languages (de, fr, it, en)
+"all_column_names"
