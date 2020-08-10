@@ -6,6 +6,6 @@ test_that(paste0("analysis() returns an object of type ",
                  })
 
 test_that("analysis() returns a list object", {
-  results <- analysis(datalist_gebaeudetechnik, 1, 2019, "F", "M")
+  results <- analysis(datalist_imprimerie, 1, 2019, 2, 1)
   expect_type(results, "list")
 })

@@ -19,4 +19,4 @@ all_column_names <- list(
   )
 )
 
-usethis::use_data(all_column_names, overwrite = TRUE)
+usethis::use_data(all_column_names, internal = TRUE, overwrite = TRUE)
