@@ -8,7 +8,7 @@ get_kennedy_estimator(coefficient, variance)
 }
 \arguments{
 \item{coefficient}{numeric value of the estimated coefficient for a dummy
-variable in a semilogarithmic regression}
+variable in a semi-logarithmic regression}
 
 \item{variance}{numeric value of the variance of this estimated coefficient}
 }
@@ -17,12 +17,12 @@ a numeric value representing the so-called "Kennedy estimator"
 }
 \description{
 Computes the consistent and almost unbiased estimator for dummy variables in
-semilogarithmic regressions proposed by Kennedy, P.E. (1981). Estimation
-with correctly interpreted dummy variables in semilogarithmic equations.
+semi-logarithmic regressions proposed by Kennedy, P.E. (1981). Estimation
+with correctly interpreted dummy variables in semi-logarithmic equations.
 American Economic Review, 71, 801.
 }
 \details{
-Given a semilogarithmic regression with a dummy variable and its estimated
+Given a semi-logarithmic regression with a dummy variable and its estimated
 coefficient \code{c} with a variance \code{v}, the consistent and almost
 unbiased estimator proposed by Kennedy is computed as
 \code{k = exp(c) / exp(v / 2) - 1}

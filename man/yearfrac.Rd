@@ -16,7 +16,7 @@ fractional years between \code{date1} and \code{date2}
 }
 \description{
 Computes the time difference between \code{date1} and \code{date2} in
-fractional year terms. This is equivalent to the YEARFRAC() method used in
+fractional year terms. This is equivalent to the YEARFRAC() method from
 Excel, with the parameter "Actual/Actual"
 }
 \keyword{internal}

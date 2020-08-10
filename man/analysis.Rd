@@ -20,10 +20,10 @@ analysis(
 \item{data}{a data.frame of employees as produced by \code{read_data}}
 
 \item{reference_month}{an integer representing the reference month, i.e. the
-month for which we analyse the salaries}
+month for which we analyze the salaries}
 
 \item{reference_year}{an integer representing the reference year, i.e. the
-year for which we analyse the salaries}
+year for which we analyze the salaries}
 
 \item{female_spec}{an optional string or numeric representing the way women
 are encoded in the \code{data}}

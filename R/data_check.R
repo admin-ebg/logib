@@ -196,9 +196,9 @@ check_data <- function(data) {
 #' @param rows a vector of numbers representing the rows which contain an error
 #' @param pers_id a vector of strings of the personal ID which contain an error
 #' @param vals a vector of the erroneous values
-#' @param description the description of the error occuring
+#' @param description the description of the error occurring
 #' @param column the name of the column containing the error
-#' @param importance the importance of the error occuring
+#' @param importance the importance of the error occurring
 #'
 #' @return a dataframe of errors with the columns \code{column},
 #' \code{description}, \code{importance}

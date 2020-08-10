@@ -2,7 +2,7 @@
 % Please edit documentation in R/date_utils.R
 \name{feb29_between}
 \alias{feb29_between}
-\title{Check if the interval between two dates contains the 29th February}
+\title{Check if the interval between two dates contains February 29}
 \usage{
 feb29_between(date1, date2)
 }
@@ -15,6 +15,6 @@ feb29_between(date1, date2)
 a boolean
 }
 \description{
-Check if the interval between two dates contains the 29th February
+Check if the interval between two dates contains February 29
 }
 \keyword{internal}

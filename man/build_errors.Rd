@@ -15,9 +15,9 @@ build_errors(rows, pers_id, vals, column, description, importance)
 
 \item{column}{the name of the column containing the error}
 
-\item{description}{the description of the error occuring}
+\item{description}{the description of the error occurring}
 
-\item{importance}{the importance of the error occuring}
+\item{importance}{the importance of the error occurring}
 }
 \value{
 a dataframe of errors with the columns \code{column},

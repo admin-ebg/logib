@@ -21,7 +21,7 @@ within_a_year <- function(date1, date2) {
 }
 
 
-#' Check if the interval between two dates contains the 29th February
+#' Check if the interval between two dates contains February 29
 #'
 #' @param date1 the first date by chronological order
 #' @param date2 the second date by chronological order
@@ -62,7 +62,7 @@ feb29_between <- function(date1, date2) {
 #' Time difference between two dates in fractional year terms
 #'
 #' Computes the time difference between \code{date1} and \code{date2} in
-#' fractional year terms. This is equivalent to the YEARFRAC() method used in
+#' fractional year terms. This is equivalent to the YEARFRAC() method from
 #' Excel, with the parameter "Actual/Actual"
 #'
 #' @param date1 the first date

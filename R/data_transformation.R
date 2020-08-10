@@ -1,6 +1,6 @@
 #' Compute age values
 #'
-#' Computes the age given a birthyear or a birthdate
+#' Computes the age given a birth year or a birth date
 #'
 #' @param x a string or number vector to be transformed
 #' @param age_spec a string indicating the age specification, can be one of
@@ -8,7 +8,7 @@
 #' this parameter is set to \code{NULL}, the function automatically tries to
 #' infers the specification
 #' @param reference_year a number indicating the reference year in order to
-#' compute the age from a birthyear or birthdate. If \code{age_spec} is
+#' compute the age from a birth year or birth date. If \code{age_spec} is
 #' \code{"age"}, this parameter can be ignored.
 #'
 #' @return a numeric vector of ages
