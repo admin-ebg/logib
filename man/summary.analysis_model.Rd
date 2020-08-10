@@ -4,11 +4,16 @@
 \alias{summary.analysis_model}
 \title{Summary of the Salary Analysis}
 \usage{
-\method{summary}{analysis_model}(object)
+\method{summary}{analysis_model}(object, ...)
 }
 \arguments{
 \item{object}{estimated salary analysis object of class
 \code{analysis_model}}
+
+\item{...}{further arguments passed to or from other methods}
+}
+\value{
+Nothing
 }
 \description{
 Summary of an estimated salary analysis object of class
@@ -23,9 +28,10 @@ regression.
 }
 \examples{
 # Estimate standard analysis model
-result <- standard_analysis(data, 2020)
+results <- analysis(data = datalist_imprimerie, reference_month = 1,
+   reference_year = 2019, female_spec = 1, male_spec = 2)
 
 # Show summary of the salary analysis
-summary(result)
+summary(results)
 
 }

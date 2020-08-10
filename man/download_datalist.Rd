@@ -20,8 +20,3 @@ None
 Downloads an empty version of the latest official excel datalist in the
 specified language to the given \code{path}.
 }
-\examples{
-download_datalist("~/my/path/datalist.xlsx", "fr")
-download_datalist("C:/my/path/datalist.xlsx", "it")
-
-}

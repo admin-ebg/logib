@@ -10,10 +10,6 @@
 #'
 #' @return None
 #'
-#' @examples
-#' download_datalist("~/my/path/datalist.xlsx", "fr")
-#' download_datalist("C:/my/path/datalist.xlsx", "it")
-#'
 #' @export
 download_datalist <- function(file, language = "de") {
   language <- tolower(language)
@@ -27,9 +23,7 @@ download_datalist <- function(file, language = "de") {
   }
 
   # Build the URL according to the given language
-  url <- paste0("https://www.ebg.admin.ch/dam/ebg/", language,
-                "/dokumente/lohngleichheit/logib/",
-                "datalist_v3-1.xlsx.download.xlsx/Datalist_",
+  url <- paste0("https://logib.admin.ch/assets/Data/Datalist_",
                 substr(language, 1, 1), ".xlsx")
 
   utils::download.file(url, file, mode = "wb")

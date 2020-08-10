@@ -33,7 +33,7 @@ build_custom_mapping <- function(data, language = "de", prompt_mapping = TRUE) {
   col_datalist <- gsub("\r\n", " ", all_column_names[["datalist"]][[language]])
   # Make sure the data has headers
   if (is.null(names(data))) {
-    names(data) <- paste0("column_", seq_len(ncol(test_data)))
+    names(data) <- paste0("column_", seq_len(ncol(data)))
   }
   if (prompt_mapping) {
     # Prompt the user to map the column of her or his file one by one

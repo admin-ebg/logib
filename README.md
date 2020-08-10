@@ -47,5 +47,5 @@ summary(results)
 	- [French](https://www.logib.admin.ch/assets/Data/Datalist_f.xlsx)
 	- [Italian](https://www.logib.admin.ch/assets/Data/Datalist_i.xlsx)
 + Methodology: TODO
-+ [Federal Office for Gender Equality's information page on Logib](https://www.logib.ch) 
++ [Federal Office for Gender Equality's information page on Logib](www.logib.ch) 
 + [Web implementation of the Logib salary equality model](https://www.logib.admin.ch)

@@ -47,7 +47,8 @@
 #' }
 #'
 #' @examples
-#' TODO: add examples
+#' results <- analysis(data = datalist_imprimerie, reference_month = 1,
+#'    reference_year = 2019, female_spec = 1, male_spec = 2)
 #'
 #' @export
 analysis <- function(data, reference_month, reference_year, female_spec = "F",
@@ -87,16 +88,20 @@ analysis <- function(data, reference_month, reference_year, female_spec = "F",
 #'
 #' @param object estimated salary analysis object of class
 #' \code{analysis_model}
+#' @param ... further arguments passed to or from other methods
+#'
+#' @return Nothing
 #'
 #' @examples
 #' # Estimate standard analysis model
-#' result <- standard_analysis(data, 2020)
+#' results <- analysis(data = datalist_imprimerie, reference_month = 1,
+#'    reference_year = 2019, female_spec = 1, male_spec = 2)
 #'
 #' # Show summary of the salary analysis
-#' summary(result)
+#' summary(results)
 #'
 #' @export
-summary.analysis_model <- function(object) {
+summary.analysis_model <- function(object, ...) {
   # Compute Kennedy estimate
   coef_sex_f <- object$results$coefficients[length(object$results$coefficients)]
   se_sex_f   <- summary(object$results)$coefficients[nrow(
@@ -180,7 +185,6 @@ summary.analysis_model <- function(object) {
   cat(paste0("Test to see whether the wage difference significantly exceeds ",
              "the tolerance threshold\n"), sep = "")
   cat(rep("-", 80), "\n", sep = "")
-  # TODO: Add "to the detriment of men/women"
   cat("H0: Wage diff. = 5%; HA: Wage diff. > 5%\n", sep = "")
   cat(sprintf(paste0("%-48s: %", np + 4, ".3f\n"), "Critical t-value",
               stats::qt(.95, object$results$df.residual)))
