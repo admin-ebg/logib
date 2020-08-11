@@ -42,11 +42,11 @@ summary(results)
 ```
 
 ### Further Resources
++ [Federal Office for Gender Equality's information page on Logib](www.logib.ch) 
++ [Web implementation of the Logib salary equality model](https://www.logib.admin.ch)
++ Methodology: TODO
 + Official datalists: 
 	- [English](https://www.logib.admin.ch/assets/Data/Datalist_e.xlsx)
 	- [German](https://www.logib.admin.ch/assets/Data/Datalist_d.xlsx)
 	- [French](https://www.logib.admin.ch/assets/Data/Datalist_f.xlsx)
 	- [Italian](https://www.logib.admin.ch/assets/Data/Datalist_i.xlsx)
-+ Methodology: TODO
-+ [Federal Office for Gender Equality's information page on Logib](www.logib.ch) 
-+ [Web implementation of the Logib salary equality model](https://www.logib.admin.ch)

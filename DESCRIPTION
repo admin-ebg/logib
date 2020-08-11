@@ -11,7 +11,7 @@ Authors@R: c(
            email = "ebg@ebg.admin.ch", role = c("cph", "fnd"))
     )
 Maintainer: Jonathan Chassot <logib@ebg.admin.ch>
-Description: Logib is the Swiss Confederation's standard analysis model for salary analyses. The analysis is run at company-level and the model is intended for companies with 50 or more employees (apprentices, trainees/interns and expats are not included in the analysis). Employees with at least 100 employees are required by the Gender Equality Act to conduct an equal pay analysis.
+Description: Implementation of the Swiss Confederation's standard analysis model for salary analyses in `R`. The analysis is run at company-level and the model is intended for companies with 50 or more employees (apprentices, trainees/interns and expats are not included in the analysis). Employees with at least 100 employees are required by the Gender Equality Act to conduct an equal pay analysis.
     This package allows users to run the equal salary analysis in R, providing additional transparency with respect to the methodology and simple automation possibilities.
 License: GPL-3
 Encoding: UTF-8
