@@ -44,7 +44,7 @@ summary(results)
 ### Further Resources
 + [Federal Office for Gender Equality's information page on Logib](https://www.ebg.admin.ch/ebg/en/home/dienstleistungen/logib.html) 
 + [Web implementation of the Logib salary equality model](https://www.logib.admin.ch)
-+ [Methodology](methodology.html)
++ [Methodology](methodology.pdf)
 + Official datalists: 
 	- [English](https://www.logib.admin.ch/assets/Data/Datalist_e.xlsx)
 	- [German](https://www.logib.admin.ch/assets/Data/Datalist_d.xlsx)
