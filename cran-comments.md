@@ -8,7 +8,7 @@
 
 ## R CMD check results
 * There were no ERRORs or WARNINGs.
-* There will be 1 NOTE due to being a new submission.
+* The 1 NOTE is due to being a new submission.
 
 ## Downstream dependencies
 
