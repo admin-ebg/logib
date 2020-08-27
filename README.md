@@ -12,7 +12,10 @@ devtools::install_github("JLDC/logib")
 ```
 
 ### CRAN
-Not yet released...
+In order to install the latest release from CRAN, use:
+```R
+install.packages("logib")
+```
 
 ### Examples
 
