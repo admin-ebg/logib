@@ -1,3 +1,3 @@
-# logib 0.1.0
+# logib 0.1.1
 
-* First version of the package
+* Update maintainer email address
