@@ -3,14 +3,13 @@ Type: Package
 Title: Salary Analysis by the Swiss Federal Office for Gender Equality
 Version: 0.1.1
 Authors@R: c(
-    person(given = "Jonathan", family = "Chassot", email = "logib@ebg.admin.ch", 
+    person(given = "Jonathan", family = "Chassot", email = "jonathanlaurentdominique.chassot@ebg.admin.ch", 
            role = c("aut", "cre")),
     person(given = "Jeremy", family = "Kolly", email = "logib@ebg.admin.ch", 
            role = "ctb"),
     person(given = "Federal Office for Gender Equality of Switzerland", 
            email = "ebg@ebg.admin.ch", role = c("cph", "fnd"))
     )
-Maintainer: Jonathan Chassot <jonathan.chassot@unisg.ch>
 Description: Implementation of the Swiss Confederation's standard analysis model for salary analyses <https://www.ebg.admin.ch/dam/ebg/en/dokumente/lohngleichheit/infos-zu-analysen/standard-analysemodellzurueberpruefungderlohngleichheitzwischenf.pdf.download.pdf/methodological_approachformonitoringcompliancewithwageequalitybe.pdf> in R. The analysis is run at company-level and the model is intended for companies with 50 or more employees (apprentices, trainees/interns and expats are not included in the analysis). Employees with at least 100 employees are required by the Gender Equality Act to conduct an equal pay analysis.
     This package allows users to run the equal salary analysis in R, providing additional transparency with respect to the methodology and simple automation possibilities.
 License: GPL-3
