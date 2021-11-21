@@ -1,5 +1,5 @@
 ## Submission
-* Change maintainer email address.
+* Update datalist column names.
 
 ## Test environments
 * local ubuntu 18.04, R 4.0.2
