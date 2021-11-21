@@ -1,3 +1,3 @@
-# logib 0.1.1
+# logib 0.1.2
 
-* Update maintainer email address
+* Update datalist column names
