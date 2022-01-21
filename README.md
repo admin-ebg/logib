@@ -47,7 +47,7 @@ summary(results)
 ### Further Resources
 + [Federal Office for Gender Equality's information page on Logib](https://www.ebg.admin.ch/ebg/en/home/dienstleistungen/logib-triage.html) 
 + [Web implementation of the Logib salary equality model](https://www.logib.admin.ch)
-+ [Methodology](https://www.ebg.admin.ch/dam/ebg/en/dokumente/lohngleichheit/infos-zu-analysen/standard-analysemodellzurueberpruefungderlohngleichheitzwischenf.pdf.download.pdf/methodological_approachformonitoringcompliancewithwageequalitybe.pdf)
++ [Methodology](https://www.ebg.admin.ch/ebg/en/home/services/logib-triage/logib-modul-1/standardanalysemodell-bund.html)
 + Official datalists: 
 	- [English](https://www.logib.admin.ch/assets/Data/Datalist_e.xlsx)
 	- [German](https://www.logib.admin.ch/assets/Data/Datalist_d.xlsx)
