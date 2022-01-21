@@ -1,3 +1,3 @@
-# logib 0.1.2
+# logib 0.1.3
 
-* Update datalist column names
+* Update link to methodology document.
