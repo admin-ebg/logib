@@ -148,14 +148,13 @@ check_data <- function(data) {
                                "monthly_wage_13",
                                paste0("'13th monthly wage' exceeds 25% of the ",
                                       "'basic wage'"), 1))
-  # Check for 13th monthly wage less than 8.5% (1/12) of the basic wage
-  error_rows <- as.numeric(idx[data$basic_wage -
-                                 12 * data$monthly_wage_13 > tol])
+  # Check for 13th monthly wage less than 8.3% (1/12) of the basic wage
+  error_rows <- as.numeric(idx[round(data$monthly_wage_13/data$basic_wage, 3) < 0.083])
   errors <- rbind(errors,
                   build_errors(error_rows, data$personal_number[error_rows],
                                data$monthly_wage_13[error_rows],
                                "monthly_wage_13",
-                               paste0("'13th monthly wage' is less than 8.5% ",
+                               paste0("'13th monthly wage' is less than 8.3% ",
                                       "(1/12) of the 'basic wage'"), 2))
   # Check for negative special payments
   error_rows <- as.numeric(idx[data$special_payments < 0])
