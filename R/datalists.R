@@ -41,14 +41,31 @@ download_datalist <- function(file, language = "de") {
 #' @keywords internal
 read_official_excel <- function(path) {
   col_code <- all_column_names[["code"]]
-  # If the file has 1 sheet it should be a datalist, if it has 3 it should be an
+  # If the file has 2 sheets it should be a datalist, if it has 4 it should be an
   # export file, otherwise halt the process
-  n_sheets <- length(readxl::excel_sheets(path))
-  if (n_sheets == 1) {
-    data <- readxl::read_excel(path)
+  sheet_names <- readxl::excel_sheets(path)
+  n_sheets <- length(sheet_names)
+  if (n_sheets == 2) {
+    sheet_to_read <- intersect(sheet_names, c("Vorlage_Datenblatt",
+                                              "modèle_de_feuille_de_données",
+                                              "modello_del_foglio_di_dati",
+                                              "data_sheet_template"))
+    if(!(sheet_to_read %in% sheet_names)){
+      stop(paste("The chosen file does not match any of the official files:",
+                 "Excel sheet", sheet_to_read, "is missing"))
+    }
+    data <- readxl::read_excel(path, sheet = sheet_to_read)
     data_origin <- "datalist"
-  } else if (n_sheets == 3) {
-    data <- readxl::read_excel(path, sheet = 3)
+  } else if (n_sheets == 4) {
+    sheet_to_read <- intersect(sheet_names, c("Individuelle_Angaben",
+                                              "Données_individuelles",
+                                              "Dati_individuali",
+                                              "Individual_information"))
+    if(!(sheet_to_read %in% sheet_names)){
+      stop(paste("The chosen file does not match any of the official files:",
+                 "Excel sheet", sheet_to_read, "is missing"))
+    }
+    data <- readxl::read_excel(path, sheet = sheet_to_read)
     data_origin <- "data_export"
   } else {
     stop("The chosen file does not match any of the official files.")
