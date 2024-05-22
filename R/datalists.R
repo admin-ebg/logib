@@ -47,7 +47,7 @@ read_official_excel <- function(path) {
   n_sheets <- length(sheet_names)
   if (n_sheets == 2) {
     sheet_to_read <- intersect(sheet_names, c("Vorlage_Datenblatt",
-                                              "modèle_de_feuille_de_données",
+                                              "mod\u00E8le_de_feuille_de_donn\u00E9es",
                                               "modello_del_foglio_di_dati",
                                               "data_sheet_template"))
     if(!(sheet_to_read %in% sheet_names)){
@@ -58,7 +58,7 @@ read_official_excel <- function(path) {
     data_origin <- "datalist"
   } else if (n_sheets == 4) {
     sheet_to_read <- intersect(sheet_names, c("Individuelle_Angaben",
-                                              "Données_individuelles",
+                                              "Donn\u00E9es_individuelles",
                                               "Dati_individuali",
                                               "Individual_information"))
     if(!(sheet_to_read %in% sheet_names)){

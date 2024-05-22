@@ -75,6 +75,6 @@ Runs a salary analysis according to the Swiss standard analysis model
 }
 \examples{
 results <- analysis(data = datalist_imprimerie, reference_month = 1,
-   reference_year = 2019, female_spec = 1, male_spec = 2)
+   reference_year = 2019, female_spec = "F", male_spec = "M")
 
 }
