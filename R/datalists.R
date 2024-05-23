@@ -76,10 +76,10 @@ read_official_excel <- function(path) {
     if (length(names(data)) == length(col_data)) {
       if (all(names(data) == col_data)) {
         # Map column names to the 'code' names and return the dataframe
+        data <- data[, 1:23]
         names(data) <- col_code
         # Transform specific columns to numerical values for the Exportfile
         if (data_origin == "data_export") {
-          data <- data[, 1:23]
           for (col_name in c("age", "years_of_service", "training",
                              "level_of_requirements", "professional_position",
                              "activity_rate", "paid_hours", "basic_wage",
