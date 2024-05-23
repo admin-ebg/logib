@@ -124,17 +124,21 @@ summary.analysis_model <- function(object, ...) {
            "method does not allow a valid gender effect to be determined."),
     paste0("The value is statistically significant. The statistical method ",
            "allows a valid gender effect to be determined."),
-    paste0("The value exceeds 5%, which is statistically significant. The ",
-           "statistical method allows a major, valid gender effect to be ",
+    paste0("The value is statistically significant. The value exceeds the target value of 2.5%. ",
+           "The statistical method allows a valid gender effect to be ",
+           "determined."),
+    paste0("The value is statistically significant. The value exceeds the limit value of 5%. ",
+           "The statistical method allows a major, valid gender effect to be ",
            "determined."))
   sig_level <- 0.05
-  h0_threshold <- 0.05
+  target_value <- 0.025
+  limit_value <- 0.05
   rating_level <- ifelse(
     2 * (1 - stats::pt(abs(coef_sex_f) / se_sex_f,
                 df = object$results$df.residual)) > sig_level, 1,
     ifelse(
-      1 - stats::pt((abs(coef_sex_f) - h0_threshold) / se_sex_f,
-             df = object$results$df.residual) > sig_level, 2, 3))
+      abs(kennedy_estimate) <= target_value, 2,
+      ifelse(abs(kennedy_estimate) <= limit_value, 3, 4)))
   # Infer the print size for methodology metrics from the degrees of freedom
   np <- ceiling(log(object$results$df.residual, 10))
 
@@ -182,17 +186,4 @@ summary.analysis_model <- function(object, ...) {
                         object$results$df.residual)), sep = "")
   cat(sprintf("%-48s: %s\n\n", "Significance", ifelse(rating_level == 1, "No",
                                                    "Yes")))
-  cat(paste0("Test to see whether the wage difference significantly exceeds ",
-             "the tolerance threshold\n"), sep = "")
-  cat(rep("-", 80), "\n", sep = "")
-  cat("H0: Wage diff. = 5%; HA: Wage diff. > 5%\n", sep = "")
-  cat(sprintf(paste0("%-48s: %", np + 4, ".3f\n"), "Critical t-value",
-              stats::qt(.95, object$results$df.residual)))
-  cat("(Alpha = 5%, one-sided, N = degrees of freedom)\n", sep = "")
-  cat(sprintf(paste0("%-48s: %", np + 4, ".3f\n"), "Test statistic t",
-              stats::qt(stats::pt((abs(coef_sex_f) - h0_threshold) / se_sex_f,
-                                  object$results$df.residual),
-                        object$results$df.residual)), sep = "")
-  cat(sprintf("%-48s: %s\n\n", "Significance", ifelse(rating_level == 3, "Yes",
-                                                       "No")))
 }
