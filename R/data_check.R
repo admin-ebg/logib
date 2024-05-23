@@ -22,7 +22,7 @@ check_data <- function(data) {
   # ----- Missing values check -------------------------------------------------
   # Check for missing values of all obligatory columns
   obligatory_columns <- c("personal_number", "age", "sex", "years_of_service",
-                          "training", "professional_function", "skill_level",
+                          "training", "professional_function", "level_of_requirements",
                           "professional_position", "basic_wage", "population")
   for (col in obligatory_columns) {
     error_rows <- as.numeric(idx[is.na(data[, col])])

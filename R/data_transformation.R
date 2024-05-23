@@ -140,7 +140,7 @@ transform_data <- function(data, reference_year, female_spec = "F",
   # the prepare_data() function
   data$sex <- factor(data$sex, levels = c(male_spec, female_spec),
                      labels = c("M", "F"))
-  data$skill_level <- factor(data$skill_level)
+  data$level_of_requirements <- factor(data$level_of_requirements)
   data$professional_position <- factor(data$professional_position)
 
   # Transform NA salary components and workload components to zero

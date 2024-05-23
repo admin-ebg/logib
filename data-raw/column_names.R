@@ -1,6 +1,6 @@
 all_column_names <- list(
   code = c("personal_number", "age", "sex", "years_of_service", "training",
-           "professional_function", "skill_level", "professional_position",
+           "professional_function", "level_of_requirements", "professional_position",
            "activity_rate", "paid_hours", "basic_wage", "allowances",
            "monthly_wage_13", "special_payments", "weekly_hours",
            "annual_hours", "population", "comments", "supplement1",

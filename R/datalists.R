@@ -81,7 +81,7 @@ read_official_excel <- function(path) {
         if (data_origin == "data_export") {
           data <- data[, 1:23]
           for (col_name in c("age", "years_of_service", "training",
-                             "skill_level", "professional_position",
+                             "level_of_requirements", "professional_position",
                              "activity_rate", "paid_hours", "basic_wage",
                              "allowances", "monthly_wage_13",
                              "special_payments", "weekly_hours",

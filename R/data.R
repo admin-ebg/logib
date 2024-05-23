@@ -11,7 +11,7 @@
 #'   \item{years_of_service}{years of service, in years},
 #'   \item{training}{training code, 1-8},
 #'   \item{professional_function}{function / job},
-#'   \item{skill_level}{skill level code, 1-4},
+#'   \item{level_of_requirements}{level of requirements code, 1-4},
 #'   \item{professional_position}{professional position / hierarchy code, 1-5},
 #'   \item{activity_rate}{activity rate, in percent},
 #'   \item{paid_hours}{paid hours, in hours},
