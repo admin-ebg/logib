@@ -1,3 +1,5 @@
-# logib 0.1.3
+# logib 0.2.0
 
-* Update link to methodology document.
+* Updated datalists and URLs.
+* Tolerance threshold renamed to limit value.
+* Second significance test removed.

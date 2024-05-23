@@ -56,10 +56,10 @@ estimate the standard analysis model
 \description{
 Prepares a dataframe for the analysis in three steps:
 \itemize{
-  \item{Checks whether \code{sex}, \code{age}, and \code{entry_date} have the
-  correct format and whether their specifications are plausible}
-  \item{Build the dataframe used for the analysis}
-  \item{Check each row of the dataframe for correctness and plausibility}
+\item{Checks whether \code{sex}, \code{age}, and \code{entry_date} have the
+correct format and whether their specifications are plausible}
+\item{Build the dataframe used for the analysis}
+\item{Check each row of the dataframe for correctness and plausibility}
 }
 }
 \keyword{internal}
