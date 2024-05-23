@@ -47,7 +47,7 @@
 #' }
 #'
 #' @examples
-#' results <- analysis(data = datalist_imprimerie, reference_month = 1,
+#' results <- analysis(data = datalist_example, reference_month = 1,
 #'    reference_year = 2019, female_spec = "F", male_spec = "M")
 #'
 #' @export
@@ -94,7 +94,7 @@ analysis <- function(data, reference_month, reference_year, female_spec = "F",
 #'
 #' @examples
 #' # Estimate standard analysis model
-#' results <- analysis(data = datalist_imprimerie, reference_month = 1,
+#' results <- analysis(data = datalist_example, reference_month = 1,
 #'    reference_year = 2019, female_spec = "F", male_spec = "M")
 #'
 #' # Show summary of the salary analysis

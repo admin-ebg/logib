@@ -1,4 +1,4 @@
-#' Imprimerie datalist
+#' Example datalist
 #'
 #' Fictional dataset containing the necessary information to run an equal pay
 #' analysis.
@@ -28,7 +28,7 @@
 #'   \item{supplement3}{additional remarks (3 of 5)},
 #'   \item{supplement4}{additional remarks (4 of 5)},
 #'   \item{supplement5}{additional remarks (5 of 5)}}
-"datalist_imprimerie"
+"datalist_example"
 
 
 #' Column names
