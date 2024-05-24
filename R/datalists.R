@@ -74,7 +74,8 @@ read_official_excel <- function(path) {
   for (lang in c("de", "en", "fr", "it")) {
     col_data <- all_column_names[[data_origin]][[lang]]
     if (length(names(data)) == length(col_data)) {
-      if (all(names(data) == col_data)) {
+      # gsub removes the carriage return, \r, used by Windows
+      if (all(gsub("\r\n", "\n", names(data)) == col_data)) {
         # Map column names to the 'code' names and return the dataframe
         data <- data[, 1:23]
         names(data) <- col_code
