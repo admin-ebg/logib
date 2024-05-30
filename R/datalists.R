@@ -64,11 +64,6 @@ download_example_datalist <- function(file, language = "de") {
   utils::download.file(url, file, mode = "wb")
 }
 
-
-
-
-
-
 #' Read official datalist or data_export Excel file
 #'
 #' Reads an official datalist or data_export file into a dataframe object.

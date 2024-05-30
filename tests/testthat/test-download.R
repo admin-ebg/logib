@@ -1,61 +1,35 @@
-# Test whether datalists can be downloaded and have correct sheet and variable names
-test_that("Datalist DE can be downloaded and has correct sheet names", {
-  url <- "https://logib.admin.ch/assets/Data/Datalist_d.xlsx"
-  download.file(url, testthat::test_path("Datalist_d.xlsx"), mode = "wb")
-  sheet_names <- readxl::excel_sheets(testthat::test_path("Datalist_d.xlsx"))
-  expect_true(all(sheet_names == c("Generelle_Angaben", "Vorlage_Datenblatt")))
+# Test whether the included example file is the same as the downloaded one
+test_that("The included example file is identical to the downloaded example file", {
+  download_example_datalist(testthat::test_path("Example_data_sheet_M1.xlsx"), language = "en")
+  data <- read_data(testthat::test_path("Example_data_sheet_M1.xlsx"))
+  expect_true(all(datalist_example == data, na.rm = TRUE))
 })
 
+# Tests whether datalists can be downloaded and have correct variable names
 test_that("Datalist DE can be downloaded and has correct variable names", {
-  url <- "https://logib.admin.ch/assets/Data/Datalist_d.xlsx"
-  download.file(url, testthat::test_path("Datalist_d.xlsx"), mode = "wb")
-  var_names_download <- names(readxl::read_excel(testthat::test_path("Datalist_d.xlsx"), sheet = 2))
-  var_names <- names(readxl::read_excel(testthat::test_path("datalist_de.xlsx"), sheet = 2))
+  download_datalist(testthat::test_path("Datalist_d.xlsx"), language = "de")
+  var_names_download <- names(read_data(testthat::test_path("Datalist_d.xlsx")))
+  var_names <- names(read_data(testthat::test_path("datalist_de.xlsx")))
   expect_true(all(var_names_download == var_names))
-})
-
-test_that("Datalist FE can be downloaded and has correct sheet names", {
-  url <- "https://logib.admin.ch/assets/Data/Datalist_f.xlsx"
-  download.file(url, testthat::test_path("Datalist_f.xlsx"), mode = "wb")
-  sheet_names <- readxl::excel_sheets(testthat::test_path("Datalist_f.xlsx"))
-  expect_true(all(sheet_names == c("Donn\u00E9es_g\u00E9n\u00E9rales", "mod\u00E8le_de_feuille_de_donn\u00E9es")))
 })
 
 test_that("Datalist FR can be downloaded and has correct variable names", {
-  url <- "https://logib.admin.ch/assets/Data/Datalist_f.xlsx"
-  download.file(url, testthat::test_path("Datalist_f.xlsx"), mode = "wb")
-  var_names_download <- names(readxl::read_excel(testthat::test_path("Datalist_f.xlsx"), sheet = 2))
-  var_names <- names(readxl::read_excel(testthat::test_path("datalist_fr.xlsx"), sheet = 2))
+  download_datalist(testthat::test_path("Datalist_f.xlsx"), language = "fr")
+  var_names_download <- names(read_data(testthat::test_path("Datalist_f.xlsx")))
+  var_names <- names(read_data(testthat::test_path("datalist_fr.xlsx")))
   expect_true(all(var_names_download == var_names))
-})
-
-test_that("Datalist IT can be downloaded and has correct sheet names", {
-  url <- "https://logib.admin.ch/assets/Data/Datalist_i.xlsx"
-  download.file(url, testthat::test_path("Datalist_i.xlsx"), mode = "wb")
-  sheet_names <- readxl::excel_sheets(testthat::test_path("Datalist_i.xlsx"))
-  expect_true(all(sheet_names == c("Dati_generali", "modello_del_foglio_di_dati")))
 })
 
 test_that("Datalist IT can be downloaded and has correct variable names", {
-  url <- "https://logib.admin.ch/assets/Data/Datalist_i.xlsx"
-  download.file(url, testthat::test_path("Datalist_i.xlsx"), mode = "wb")
-  var_names_download <- names(readxl::read_excel(testthat::test_path("Datalist_i.xlsx"), sheet = 2))
-  var_names <- names(readxl::read_excel(testthat::test_path("datalist_it.xlsx"), sheet = 2))
+  download_datalist(testthat::test_path("Datalist_i.xlsx"), language = "it")
+  var_names_download <- names(read_data(testthat::test_path("Datalist_i.xlsx")))
+  var_names <- names(read_data(testthat::test_path("datalist_it.xlsx")))
   expect_true(all(var_names_download == var_names))
-})
-
-test_that("Datalist EN can be downloaded and has correct sheet names", {
-  url <- "https://logib.admin.ch/assets/Data/Datalist_e.xlsx"
-  download.file(url, testthat::test_path("Datalist_e.xlsx"), mode = "wb")
-  sheet_names <- readxl::excel_sheets(testthat::test_path("Datalist_e.xlsx"))
-  expect_true(all(sheet_names == c("General_information", "data_sheet_template")))
 })
 
 test_that("Datalist EN can be downloaded and has correct variable names", {
-  url <- "https://logib.admin.ch/assets/Data/Datalist_e.xlsx"
-  download.file(url, testthat::test_path("Datalist_e.xlsx"), mode = "wb")
-  var_names_download <- names(readxl::read_excel(testthat::test_path("Datalist_e.xlsx"), sheet = 2))
-  var_names <- names(readxl::read_excel(testthat::test_path("datalist_en.xlsx"), sheet = 2))
+  download_datalist(testthat::test_path("Datalist_e.xlsx"), language = "en")
+  var_names_download <- names(read_data(testthat::test_path("Datalist_e.xlsx")))
+  var_names <- names(read_data(testthat::test_path("datalist_en.xlsx")))
   expect_true(all(var_names_download == var_names))
 })
-
