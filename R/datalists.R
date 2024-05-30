@@ -1,6 +1,6 @@
 #' Download official Excel datalists
 #'
-#' Downloads an empty version of the latest official excel datalist in the
+#' Downloads an empty version of the latest official Excel datalist in the
 #' specified language to the given \code{path}.
 #'
 #' @param file a character string representing the file path to which the
@@ -28,6 +28,46 @@ download_datalist <- function(file, language = "de") {
 
   utils::download.file(url, file, mode = "wb")
 }
+
+#' Download official filled-in sample Excel datalists
+#'
+#' Downloads a filled-in version of the latest official Excel datalist in the
+#' specified language to the given \code{path}.
+#'
+#' @param file a character string representing the file path to which the
+#' downloaded datalist will be saved.
+#' @param language a character string representing the language of the datalist
+#' to be download (\code{"de"} or \code{"fr"} or \code{"it"} or \code{"en"}).
+#'
+#' @return None
+#'
+#' @export
+download_example_datalist <- function(file, language = "de") {
+  language <- tolower(language)
+
+  # Make sure the given language and the file extension are valid
+  if (!(language %in% c("de", "en", "fr", "it"))) {
+    stop("The language must be either 'de', 'fr', 'it', or 'en'.")
+  }
+  if (substr(tolower(file), nchar(file) - 4, nchar(file)) != ".xlsx") {
+    stop("The destination file must end in .xlsx")
+  }
+
+  # Build the URL according to the given language
+  url <- paste0("https://logib.admin.ch/assets/Data/",
+                switch(language,
+                       "de" = "Beispiel_Datenblatt_M1",
+                       "fr" = "Exemple_feuille_de_donn%C3%A9es_M1",
+                       "it" = "Esempio_foglio_di_dati_M1",
+                       "en" = "Example_data_sheet_M1"), ".xlsx")
+
+  utils::download.file(url, file, mode = "wb")
+}
+
+
+
+
+
 
 #' Read official datalist or data_export Excel file
 #'
