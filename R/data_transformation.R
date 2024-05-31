@@ -171,11 +171,6 @@ transform_data <- function(data, reference_year, usual_weekly_hours,
   # equality)
   mfww <- max(as.numeric(names(which(table(data$weekly_hours) == max(table(
     data$weekly_hours))))))
-  # Special case when there are no weekly hours and only hourly contracts
-  if (mfww == 0) {
-    mfww <- max(as.numeric(names(which(table(data$annual_hours) == max(table(
-      data$annual_hours)))))) / 52
-  }
 
   # Build an FTE column for salary standardization
   data$fte <- (data$weekly_hours * data$activity_rate) / (100 * mfww)
