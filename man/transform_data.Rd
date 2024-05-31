@@ -7,8 +7,8 @@
 transform_data(
   data,
   reference_year,
-  female_spec = "F",
-  male_spec = "M",
+  female_spec = 1,
+  male_spec = 2,
   age_spec = NULL,
   entry_date_spec = NULL
 )

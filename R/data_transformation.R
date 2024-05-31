@@ -133,8 +133,8 @@ compute_years_of_service <- function(x, entry_date_spec = NULL,
 #' be one of \code{NULL}, \code{"years"}, \code{"entry_year"}, or
 #' \code{"entry_date"}. If this parameter is set to \code{NULL}, the function
 #' automatically tries to infers the specification
-transform_data <- function(data, reference_year, female_spec = "F",
-                           male_spec = "M", age_spec = NULL,
+transform_data <- function(data, reference_year, female_spec = 1,
+                           male_spec = 2, age_spec = NULL,
                            entry_date_spec = NULL) {
   # At this stage, the specifications must be OK as they are being checked in
   # the prepare_data() function
@@ -182,6 +182,9 @@ transform_data <- function(data, reference_year, female_spec = "F",
   data$standardized_salary <- data$standardized_basic_wage +
     data$standardized_allowances + data$standardized_monthly_wage_13 +
     data$standardized_special_payments
+
+  # Replace NA in population with 1
+  data$population <- ifelse(is.na(data$population), 1, data$population)
 
   data
 }

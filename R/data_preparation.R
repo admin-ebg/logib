@@ -104,7 +104,7 @@ build_custom_mapping <- function(data, language = "de", prompt_mapping = TRUE) {
 #'
 #' @keywords internal
 prepare_data <- function(data, reference_month, reference_year,
-                         female_spec = "F", male_spec = "M", age_spec = NULL,
+                         female_spec = 1, male_spec = 2, age_spec = NULL,
                          entry_date_spec = NULL,
                          ignore_plausibility_check = FALSE,
                          prompt_data_cleanup = FALSE) {
