@@ -33,7 +33,8 @@ test_that("analysis() returns the correct results using internal data", {
 
 # Test the expected output of a salary analysis using the downloaded example data
 test_that("analysis() returns the correct results using downloaded example data DE", {
-  download_example_datalist(testthat::test_path("Beispiel_Datenblatt_M1.xlsx"), language = "de")
+  download_example_datalist(testthat::test_path("Beispiel_Datenblatt_M1.xlsx"),
+                            language = "de")
   data <- read_data(testthat::test_path("Beispiel_Datenblatt_M1.xlsx"))
   results <- analysis(data,
                       reference_month = 1, reference_year = 2019,
@@ -50,7 +51,8 @@ test_that("analysis() returns the correct results using downloaded example data 
 })
 
 test_that("analysis() returns the correct results using downloaded example data FR", {
-  download_example_datalist(testthat::test_path("Exemple_feuille_de_donnees_M1.xlsx"), language = "fr")
+  download_example_datalist(testthat::test_path("Exemple_feuille_de_donnees_M1.xlsx"),
+                            language = "fr")
   data <- read_data(testthat::test_path("Exemple_feuille_de_donnees_M1.xlsx"))
   results <- analysis(data,
                       reference_month = 1, reference_year = 2019,
@@ -67,7 +69,8 @@ test_that("analysis() returns the correct results using downloaded example data 
 })
 
 test_that("analysis() returns the correct results using downloaded example data IT", {
-  download_example_datalist(testthat::test_path("Esempio_foglio_di_dati_M1.xlsx"), language = "it")
+  download_example_datalist(testthat::test_path("Esempio_foglio_di_dati_M1.xlsx"),
+                            language = "it")
   data <- read_data(testthat::test_path("Esempio_foglio_di_dati_M1.xlsx"))
   results <- analysis(data,
                       reference_month = 1, reference_year = 2019,
@@ -84,7 +87,8 @@ test_that("analysis() returns the correct results using downloaded example data 
 })
 
 test_that("analysis() returns the correct results using downloaded example data EN", {
-  download_example_datalist(testthat::test_path("Example_data_sheet_M1.xlsx"), language = "en")
+  download_example_datalist(testthat::test_path("Example_data_sheet_M1.xlsx"),
+                            language = "en")
   data <- read_data(testthat::test_path("Example_data_sheet_M1.xlsx"))
   results <- analysis(data,
                       reference_month = 1, reference_year = 2019,
