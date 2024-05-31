@@ -72,6 +72,7 @@ analysis <- function(data, reference_month, reference_year,
                                 age_spec, entry_date_spec,
                                 ignore_plausibility_check,
                                 prompt_data_cleanup)
+  data_prepared$data <- data_prepared$data[data_prepared$data$population == 1,]
   results <- run_standard_analysis_model(data_prepared$data)
   output <- list(params = params,
                  data_original = data_original,
