@@ -1,18 +1,26 @@
 # Test the expected output of a salary analysis using the internal test data
 test_that(paste0("analysis() returns an object of type ",
                  "analysis_model"), {
-                   results <- analysis(datalist_example, 1, 2019, 1, 2)
+                   results <- analysis(datalist_example, reference_month = 1,
+                                       reference_year = 2019,
+                                       usual_weekly_hours = 40,
+                                       female_spec = 1, male_spec = 2)
                    expect_s3_class(results, "analysis_model")
                  })
 
 test_that("analysis() returns a list object", {
-  results <- analysis(datalist_example, 1, 2019, 1, 2)
+  results <- analysis(datalist_example, reference_month = 1,
+                      reference_year = 2019,
+                      usual_weekly_hours = 40,
+                      female_spec = 1, male_spec = 2)
   expect_type(results, "list")
 })
 
 test_that("analysis() returns the correct results", {
   results <- analysis(read_data(testthat::test_path("Exportfile_M1_de.xlsx")),
-                      1, 2019, female_spec = "F", male_spec = "M")
+                      reference_month = 1, reference_year = 2019,
+                      usual_weekly_hours = 40, female_spec = "F",
+                      male_spec = "M")
   coef_sex_f <- results$results$coefficients["sexF"]
   se_sex_f <- summary(results$results)$coefficients["sexF", 2]
   expect_true(all(round(coef_sex_f, 3) == -0.042,

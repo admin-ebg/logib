@@ -7,6 +7,10 @@
 #' month for which we analyze the salaries
 #' @param reference_year an integer representing the reference year, i.e. the
 #' year for which we analyze the salaries
+#' @param usual_weekly_hours an optional numeric representing the usual weekly
+#' working hours (missing values in \code{weekly_hours} are replaced by
+#' \code{usual_weekly_hours}; if \code{NULL}, the missing values are not
+#' replaced)
 #' @param female_spec an optional string or numeric representing the way women
 #' are encoded in the \code{data}
 #' @param male_spec an optional string or numeric representing the way men are
@@ -48,21 +52,25 @@
 #'
 #' @examples
 #' results <- analysis(data = datalist_example, reference_month = 1,
-#'    reference_year = 2019, female_spec = 1, male_spec = 2)
+#'    reference_year = 2019, usual_weekly_hours = 40, female_spec = 1,
+#'    male_spec = 2)
 #'
 #' @export
-analysis <- function(data, reference_month, reference_year, female_spec = 1,
-                     male_spec = 2, age_spec = NULL, entry_date_spec = NULL,
+analysis <- function(data, reference_month, reference_year,
+                     usual_weekly_hours = NULL, female_spec = 1, male_spec = 2,
+                     age_spec = NULL, entry_date_spec = NULL,
                      ignore_plausibility_check = FALSE,
                      prompt_data_cleanup = FALSE) {
   params <- list(reference_month = reference_month,
-                 reference_year = reference_year, female_spec = female_spec,
-                 male_spec = male_spec, age_spec = age_spec,
-                 entry_date_spec = entry_date_spec)
+                 reference_year = reference_year,
+                 usual_weekly_hours = usual_weekly_hours,
+                 female_spec = female_spec, male_spec = male_spec,
+                 age_spec = age_spec, entry_date_spec = entry_date_spec)
   data_original <- data
   data_prepared <- prepare_data(data, reference_month, reference_year,
-                                female_spec, male_spec, age_spec,
-                                entry_date_spec, ignore_plausibility_check,
+                                usual_weekly_hours, female_spec, male_spec,
+                                age_spec, entry_date_spec,
+                                ignore_plausibility_check,
                                 prompt_data_cleanup)
   results <- run_standard_analysis_model(data_prepared$data)
   output <- list(params = params,
@@ -95,7 +103,8 @@ analysis <- function(data, reference_month, reference_year, female_spec = 1,
 #' @examples
 #' # Estimate standard analysis model
 #' results <- analysis(data = datalist_example, reference_month = 1,
-#'    reference_year = 2019, female_spec = 1, male_spec = 2)
+#'    reference_year = 2019, usual_weekly_hours = 40, female_spec = 1,
+#'    male_spec = 2)
 #'
 #' # Show summary of the salary analysis
 #' summary(results)

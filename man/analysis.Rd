@@ -8,6 +8,7 @@ analysis(
   data,
   reference_month,
   reference_year,
+  usual_weekly_hours = NULL,
   female_spec = 1,
   male_spec = 2,
   age_spec = NULL,
@@ -24,6 +25,11 @@ month for which we analyze the salaries}
 
 \item{reference_year}{an integer representing the reference year, i.e. the
 year for which we analyze the salaries}
+
+\item{usual_weekly_hours}{an optional numeric representing the usual weekly
+working hours (missing values in \code{weekly_hours} are replaced by
+\code{usual_weekly_hours}; if \code{NULL}, the missing values are not
+replaced)}
 
 \item{female_spec}{an optional string or numeric representing the way women
 are encoded in the \code{data}}
@@ -75,6 +81,7 @@ Runs a salary analysis according to the Swiss standard analysis model
 }
 \examples{
 results <- analysis(data = datalist_example, reference_month = 1,
-   reference_year = 2019, female_spec = 1, male_spec = 2)
+   reference_year = 2019, usual_weekly_hours = 40, female_spec = 1,
+   male_spec = 2)
 
 }

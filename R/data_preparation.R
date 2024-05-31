@@ -80,8 +80,10 @@ build_custom_mapping <- function(data, language = "de", prompt_mapping = TRUE) {
 #' @param reference_month a number indicating the reference month of the
 #' analysis
 #' @param reference_year a number indicating the reference year of the analysis
+#' @param usual_weekly_hours an optional numeric representing the usual weekly
+#' working hours
 #' @param female_spec a string or number indicating the way females are
-#' specified in the dataset.
+#' specified in the dataset
 #' @param male_spec a string or number indicating the way males are
 #' specified in the dataset
 #' @param age_spec a string indicating the age specification, can be one of
@@ -104,6 +106,7 @@ build_custom_mapping <- function(data, language = "de", prompt_mapping = TRUE) {
 #'
 #' @keywords internal
 prepare_data <- function(data, reference_month, reference_year,
+                         usual_weekly_hours,
                          female_spec = 1, male_spec = 2, age_spec = NULL,
                          entry_date_spec = NULL,
                          ignore_plausibility_check = FALSE,
@@ -111,6 +114,10 @@ prepare_data <- function(data, reference_month, reference_year,
   # Make sure the specification parameters are correct
   if (!(reference_month %in% 1:12)) {
     stop("The 'reference_month' must be an integer between 1 and 12.")
+  }
+  if (any(is.na(data$weekly_hours)) && is.null(usual_weekly_hours)) {
+    stop(paste0("'weekly_hours' has missing values, please specify ",
+         "'usual_weekly_hours'."))
   }
   if (female_spec == male_spec) {
     stop("The 'female_spec' and 'male_spec' arguments must differ.")
@@ -140,8 +147,8 @@ prepare_data <- function(data, reference_month, reference_year,
   }
   # Build the dataframe for the analysis (this will also check whether the
   # formats for age and entry_date match the specification)
-  data <- transform_data(data, reference_year, female_spec, male_spec, age_spec,
-                         entry_date_spec)
+  data <- transform_data(data, reference_year, usual_weekly_hours,
+                         female_spec, male_spec, age_spec, entry_date_spec)
   # Check the data for correctness and plausibility
   errors <- check_data(data)
   # If all data is correct and plausible, or if we don't want to prompt the data
