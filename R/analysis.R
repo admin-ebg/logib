@@ -52,12 +52,12 @@
 #'
 #' @examples
 #' results <- analysis(data = datalist_example, reference_month = 1,
-#'    reference_year = 2019, usual_weekly_hours = 40, female_spec = 1,
-#'    male_spec = 2)
+#'    reference_year = 2019, usual_weekly_hours = 40, female_spec = 2,
+#'    male_spec = 1)
 #'
 #' @export
 analysis <- function(data, reference_month, reference_year,
-                     usual_weekly_hours = NULL, female_spec = 1, male_spec = 2,
+                     usual_weekly_hours = NULL, female_spec = "F", male_spec = "M",
                      age_spec = NULL, entry_date_spec = NULL,
                      ignore_plausibility_check = FALSE,
                      prompt_data_cleanup = FALSE) {
@@ -104,8 +104,8 @@ analysis <- function(data, reference_month, reference_year,
 #' @examples
 #' # Estimate standard analysis model
 #' results <- analysis(data = datalist_example, reference_month = 1,
-#'    reference_year = 2019, usual_weekly_hours = 40, female_spec = 1,
-#'    male_spec = 2)
+#'    reference_year = 2019, usual_weekly_hours = 40, female_spec = 2,
+#'    male_spec = 1)
 #'
 #' # Show summary of the salary analysis
 #' summary(results)

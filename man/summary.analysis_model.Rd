@@ -29,8 +29,8 @@ regression.
 \examples{
 # Estimate standard analysis model
 results <- analysis(data = datalist_example, reference_month = 1,
-   reference_year = 2019, usual_weekly_hours = 40, female_spec = 1,
-   male_spec = 2)
+   reference_year = 2019, usual_weekly_hours = 40, female_spec = 2,
+   male_spec = 1)
 
 # Show summary of the salary analysis
 summary(results)

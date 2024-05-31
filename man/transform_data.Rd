@@ -8,8 +8,8 @@ transform_data(
   data,
   reference_year,
   usual_weekly_hours,
-  female_spec = 1,
-  male_spec = 2,
+  female_spec = "F",
+  male_spec = "M",
   age_spec = NULL,
   entry_date_spec = NULL
 )

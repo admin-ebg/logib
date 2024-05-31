@@ -136,7 +136,7 @@ compute_years_of_service <- function(x, entry_date_spec = NULL,
 #' \code{"entry_date"}. If this parameter is set to \code{NULL}, the function
 #' automatically tries to infers the specification
 transform_data <- function(data, reference_year, usual_weekly_hours,
-                           female_spec = 1, male_spec = 2, age_spec = NULL,
+                           female_spec = "F", male_spec = "M", age_spec = NULL,
                            entry_date_spec = NULL) {
   # At this stage, the specifications must be OK as they are being checked in
   # the prepare_data() function
