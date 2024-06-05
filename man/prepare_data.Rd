@@ -12,9 +12,7 @@ prepare_data(
   female_spec = "F",
   male_spec = "M",
   age_spec = NULL,
-  entry_date_spec = NULL,
-  ignore_plausibility_check = FALSE,
-  prompt_data_cleanup = FALSE
+  entry_date_spec = NULL
 )
 }
 \arguments{
@@ -44,14 +42,6 @@ infers the specification}
 be one of \code{NULL}, \code{"years"}, \code{"entry_year"}, or
 \code{"entry_date"}. If this parameter is set to \code{NULL}, the function
 automatically tries to infers the specification}
-
-\item{ignore_plausibility_check}{a boolean indicating whether the user wants
-to ignore implausible data. If \code{TRUE}, the implausible data is
-interpreted as being correct.}
-
-\item{prompt_data_cleanup}{a boolean indicating whether the user wants to be
-prompted regarding incorrect data values. If \code{FALSE}, the analysis will
-run without the incorrect data only.}
 }
 \value{
 a data.frame which has no incorrect rows left and can be used to

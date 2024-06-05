@@ -56,7 +56,7 @@ build_custom_mapping <- function(data, language = "de", prompt_mapping = TRUE) {
     if (length(col_code) != length(names(data))) {
       stop("The number of columns in 'data' does not match the number of ",
            "columns required by the official model. Please call the function ",
-           "with 'prompt_mapping=TRUE'.")
+           "with 'prompt_mapping = TRUE'.")
     }
     # Simply match the columns sequentially without prompting
     names(col_code) <- names(data)
@@ -94,12 +94,6 @@ build_custom_mapping <- function(data, language = "de", prompt_mapping = TRUE) {
 #' be one of \code{NULL}, \code{"years"}, \code{"entry_year"}, or
 #' \code{"entry_date"}. If this parameter is set to \code{NULL}, the function
 #' automatically tries to infers the specification
-#' @param ignore_plausibility_check a boolean indicating whether the user wants
-#' to ignore implausible data. If \code{TRUE}, the implausible data is
-#' interpreted as being correct.
-#' @param prompt_data_cleanup a boolean indicating whether the user wants to be
-#' prompted regarding incorrect data values. If \code{FALSE}, the analysis will
-#' run without the incorrect data only.
 #'
 #' @return a data.frame which has no incorrect rows left and can be used to
 #' estimate the standard analysis model
@@ -108,16 +102,14 @@ build_custom_mapping <- function(data, language = "de", prompt_mapping = TRUE) {
 prepare_data <- function(data, reference_month, reference_year,
                          usual_weekly_hours,
                          female_spec = "F", male_spec = "M", age_spec = NULL,
-                         entry_date_spec = NULL,
-                         ignore_plausibility_check = FALSE,
-                         prompt_data_cleanup = FALSE) {
+                         entry_date_spec = NULL) {
   # Make sure the specification parameters are correct
   if (!(reference_month %in% 1:12)) {
     stop("The 'reference_month' must be an integer between 1 and 12.")
   }
   if (any(is.na(data$weekly_hours)) && is.null(usual_weekly_hours)) {
     stop(paste0("'weekly_hours' has missing values, please specify ",
-         "'usual_weekly_hours'."))
+                "'usual_weekly_hours'."))
   }
   if (female_spec == male_spec) {
     stop("The 'female_spec' and 'male_spec' arguments must differ.")
@@ -131,7 +123,7 @@ prepare_data <- function(data, reference_month, reference_year,
   if (!is.null(entry_date_spec)) {
     if (!(entry_date_spec %in% c("years", "entry_year", "entry_date"))) {
       stop(paste0("The 'entry_date_spec' parameter must be one of 'years', ",
-                 "'entry_years', or 'entry_date'."))
+                  "'entry_years', or 'entry_date'."))
     }
   }
 
@@ -142,8 +134,8 @@ prepare_data <- function(data, reference_month, reference_year,
                 "there must be exactly 2 sexes for the analysis to work."))
   }
   if (!(all(sex_levels %in% c(female_spec, male_spec)))) {
-      stop(paste0("The 'female_spec' and/or 'male_spec' parameters do not ",
-                  "match the values in the data."))
+    stop(paste0("The 'female_spec' and/or 'male_spec' parameters do not ",
+                "match the values in the data."))
   }
   # Build the dataframe for the analysis (this will also check whether the
   # formats for age and entry_date match the specification)
@@ -151,47 +143,52 @@ prepare_data <- function(data, reference_month, reference_year,
                          female_spec, male_spec, age_spec, entry_date_spec)
   # Check the data for correctness and plausibility
   errors <- check_data(data)
-  # If all data is correct and plausible, or if we don't want to prompt the data
-  # cleanup method, we stop here and return
-  if (nrow(errors) == 0 | !prompt_data_cleanup) {
-    # If we don't prompt the cleanup, we simply discard all data with an error
-    # code of 1 (incorrect data)
-    invalid_rows <- unique(errors$row[errors$importance == 1])
-    if (length(invalid_rows) > 0) {
+  # We discard all data with an error code of 1 (incorrect data)
+  invalid_rows <- unique(errors$row[errors$importance == 1])
+  if (length(invalid_rows) > 0) {
+    if(length(invalid_rows) == 1){
+      message(paste("There is", length(invalid_rows), "invalid observation.",
+                    "Invalid observations will be discarded from the analysis.",
+                    "Do you want to continue? [y/n]"))
+    }
+    if(length(invalid_rows) > 1){
+    message(paste("There are", length(invalid_rows), "invalid observations.",
+                  "Invalid observations will be discarded from the analysis.",
+                  "Do you want to continue? [y/n]"))
+    }
+    answer <- readline()
+    if(tolower(answer) %in% c("y", "yes")){
       data <- data[-invalid_rows, ]
     }
-    implausible_rows <- unique(errors$row[errors$importance == 2])
-    implausible_rows <- setdiff(implausible_rows, invalid_rows)
-
-    if (length(invalid_rows) > 0) {
-      warning(paste0(length(invalid_rows), " observations are ",
-                     "invalid and have been discarded. To correct these ",
-                     "observations, set the 'prompt_data_cleanup' parameter ",
-                     "to TRUE."))
+    if(tolower(answer) %in% c("n", "no")){
+      stop("The analysis was aborted by the user.")
     }
-    if (length(implausible_rows) > 0) {
-      warning(paste0(length(implausible_rows), " observations are ",
-                     "implausible. These observations will be kept in the ",
-                     "analysis. To correct these observations, Set the ",
-                     "'prompt_data_cleanup' parameter to TRUE and the ",
-                     "'ignore_plausibility_check' parameter to FALSE."))
+    if(!(tolower(answer) %in% c("y", "yes", "n", "no"))){
+      stop(paste("Response unclear." ,
+                 "Please repeat the analysis and respond with 'y' or 'n'."))
     }
-    return(list(data = data, errors = errors))
-  } else {
-    if (ignore_plausibility_check) {
-      # If the data is correct but not plausible, we stop here and return
-      if (nrow(errors[errors$importance == 1, ]) == 0) {
-        return(list(data = data, errors = errors))
-      }
-    }
-    # The data is incorrect and/or implausible, we clean up and re-run the whole
-    # data preparation
-    data <- cleanup_errors(data, errors, ignore_plausibility_check)
   }
-  # The data has already been transformed once and thus we can use the
-  # post-transformation specifications
-  prepare_data(data, reference_year, age_spec = "age",
-               entry_date_spec = "years",
-               ignore_plausibility_check = ignore_plausibility_check,
-               prompt_data_cleanup = prompt_data_cleanup)
+  # Identify implausible data
+  implausible_rows <- unique(errors$row[errors$importance == 2])
+  implausible_rows <- setdiff(implausible_rows, invalid_rows)
+
+  if (length(invalid_rows) == 1) {
+    warning(paste(length(invalid_rows), "observation is",
+                   "invalid and has been discarded."))
+  }
+  if (length(invalid_rows) > 1) {
+    warning(paste(length(invalid_rows), "observations are",
+                   "invalid and have been discarded."))
+  }
+  if (length(implausible_rows) == 1) {
+    warning(paste(length(implausible_rows), "observation is",
+                   "implausible. This observation will be kept in the",
+                   "analysis."))
+  }
+  if (length(implausible_rows) > 1) {
+    warning(paste(length(implausible_rows), "observations are",
+                   "implausible. These observations will be kept in the",
+                   "analysis."))
+  }
+  list(data = data, errors = errors)
 }

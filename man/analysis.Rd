@@ -12,9 +12,7 @@ analysis(
   female_spec = "F",
   male_spec = "M",
   age_spec = NULL,
-  entry_date_spec = NULL,
-  ignore_plausibility_check = FALSE,
-  prompt_data_cleanup = FALSE
+  entry_date_spec = NULL
 )
 }
 \arguments{
@@ -52,13 +50,6 @@ has been in the company, \code{"entry_year"} implies that the
 \code{entry_date} is specified as the year of the entry date of the person,
 \code{"entry_date"} implies that the age is specified as the date of entry
 of the person)}
-
-\item{ignore_plausibility_check}{a boolean indicating whether the
-plausibility of the data should be checked or whether all correct data is
-considered plausible}
-
-\item{prompt_data_cleanup}{a boolean indicating whether a prompt will pop up
-to enforce cleaning the data until all data is correct}
 }
 \value{
 object of type \code{analysis_model} with the following

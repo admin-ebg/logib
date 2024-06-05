@@ -29,11 +29,6 @@
 #' \code{entry_date} is specified as the year of the entry date of the person,
 #' \code{"entry_date"} implies that the age is specified as the date of entry
 #' of the person)
-#' @param ignore_plausibility_check a boolean indicating whether the
-#' plausibility of the data should be checked or whether all correct data is
-#' considered plausible
-#' @param prompt_data_cleanup a boolean indicating whether a prompt will pop up
-#' to enforce cleaning the data until all data is correct
 #'
 #' @return object of type \code{analysis_model} with the following
 #' elements
@@ -58,9 +53,7 @@
 #' @export
 analysis <- function(data, reference_month, reference_year,
                      usual_weekly_hours = NULL, female_spec = "F", male_spec = "M",
-                     age_spec = NULL, entry_date_spec = NULL,
-                     ignore_plausibility_check = FALSE,
-                     prompt_data_cleanup = FALSE) {
+                     age_spec = NULL, entry_date_spec = NULL) {
   params <- list(reference_month = reference_month,
                  reference_year = reference_year,
                  usual_weekly_hours = usual_weekly_hours,
@@ -69,9 +62,7 @@ analysis <- function(data, reference_month, reference_year,
   data_original <- data
   data_prepared <- prepare_data(data, reference_month, reference_year,
                                 usual_weekly_hours, female_spec, male_spec,
-                                age_spec, entry_date_spec,
-                                ignore_plausibility_check,
-                                prompt_data_cleanup)
+                                age_spec, entry_date_spec)
   data_prepared$data <- data_prepared$data[data_prepared$data$population == 1,]
   results <- run_standard_analysis_model(data_prepared$data)
   output <- list(params = params,
