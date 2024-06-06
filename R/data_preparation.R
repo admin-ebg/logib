@@ -105,37 +105,37 @@ prepare_data <- function(data, reference_month, reference_year,
                          entry_date_spec = NULL) {
   # Make sure the specification parameters are correct
   if (!(reference_month %in% 1:12)) {
-    stop("The 'reference_month' must be an integer between 1 and 12.")
+    stop(simpleWarning("The 'reference_month' must be an integer between 1 and 12."))
   }
   if (any(is.na(data$weekly_hours)) && is.null(usual_weekly_hours)) {
-    stop(paste0("'weekly_hours' has missing values, please specify ",
-                "'usual_weekly_hours'."))
+    stop(simpleWarning(paste0("'weekly_hours' has missing values, please specify ",
+                "'usual_weekly_hours'.")))
   }
   if (female_spec == male_spec) {
-    stop("The 'female_spec' and 'male_spec' arguments must differ.")
+    stop(simpleWarning("The 'female_spec' and 'male_spec' arguments must differ."))
   }
   if (!is.null(age_spec)) {
     if (!(age_spec %in% c("age", "birthyear", "date_of_birth"))) {
-      stop(paste0("The 'age_spec' parameter must be one of 'age', 'birthyear'",
-                  ", or 'date_of_birth'"))
+      stop(simpleWarning(paste0("The 'age_spec' parameter must be one of 'age', 'birthyear'",
+                  ", or 'date_of_birth'")))
     }
   }
   if (!is.null(entry_date_spec)) {
     if (!(entry_date_spec %in% c("years", "entry_year", "entry_date"))) {
-      stop(paste0("The 'entry_date_spec' parameter must be one of 'years', ",
-                  "'entry_years', or 'entry_date'."))
+      stop(simpleWarning(paste0("The 'entry_date_spec' parameter must be one of 'years', ",
+                  "'entry_years', or 'entry_date'.")))
     }
   }
 
   # Make sure the formats for sex match the specification
   sex_levels <- levels(factor(data$sex))
   if (length(sex_levels) > 2) {
-    stop(paste0("There are more than 2 sexes represented in the data, ",
-                "there must be exactly 2 sexes for the analysis to work."))
+    stop(simpleWarning(paste0("There are more than 2 sexes represented in the data, ",
+                "there must be exactly 2 sexes for the analysis to work.")))
   }
   if (!(all(sex_levels %in% c(female_spec, male_spec)))) {
-    stop(paste0("The 'female_spec' and/or 'male_spec' parameters do not ",
-                "match the values in the data."))
+    stop(simpleWarning(paste0("The 'female_spec' and/or 'male_spec' parameters do not ",
+                "match the values in the data.")))
   }
   # Build the dataframe for the analysis (this will also check whether the
   # formats for age and entry_date match the specification)
@@ -163,11 +163,11 @@ prepare_data <- function(data, reference_month, reference_year,
       data <- data[-invalid_rows, ]
     }
     if(tolower(answer) %in% c("n", "no")){
-      stop("The analysis was aborted by the user.")
+      stop(simpleWarning("The analysis was aborted by the user."))
     }
     if(!(tolower(answer) %in% c("y", "yes", "n", "no"))){
-      stop(paste("Response unclear." ,
-                 "Please repeat the analysis and respond with 'y' or 'n'."))
+      stop(simpleWarning(paste("Response unclear." ,
+                 "Please repeat the analysis and respond with 'y' or 'n'.")))
     }
   }
   # Identify implausible data
