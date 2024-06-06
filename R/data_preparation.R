@@ -149,12 +149,14 @@ prepare_data <- function(data, reference_month, reference_year,
     if(length(invalid_rows) == 1){
       message(paste("There is", length(invalid_rows), "invalid observation.",
                     "Invalid observations will be discarded from the analysis.",
-                    "Do you want to continue? [y/n]"))
+                    "Do you want to continue and run the analysis without",
+                    "this observation? [y/n]"))
     }
     if(length(invalid_rows) > 1){
-    message(paste("There are", length(invalid_rows), "invalid observations.",
-                  "Invalid observations will be discarded from the analysis.",
-                  "Do you want to continue? [y/n]"))
+      message(paste("There are", length(invalid_rows), "invalid observations.",
+                    "Invalid observations will be discarded from the analysis.",
+                    "Do you want to continue and run the analysis without",
+                    "these observations? [y/n]"))
     }
     answer <- readline()
     if(tolower(answer) %in% c("y", "yes")){
@@ -173,22 +175,38 @@ prepare_data <- function(data, reference_month, reference_year,
   implausible_rows <- setdiff(implausible_rows, invalid_rows)
 
   if (length(invalid_rows) == 1) {
-    warning(paste(length(invalid_rows), "observation is",
-                   "invalid and has been discarded."))
+    errors_str <- utils::capture.output(print(errors[errors$importance == 1,
+                                              c("pers_id",
+                                                "description")]))
+    warning(simpleWarning(paste(c(paste(length(invalid_rows), "observation is",
+                          "invalid and has been discarded:"),
+                    errors_str, ""), collapse = "\n")))
   }
   if (length(invalid_rows) > 1) {
-    warning(paste(length(invalid_rows), "observations are",
-                   "invalid and have been discarded."))
+    errors_str <- utils::capture.output(print(errors[errors$importance == 1,
+                                              c("pers_id",
+                                                "description")]))
+    warning(simpleWarning(paste(c(paste(length(invalid_rows), "observations are",
+                          "invalid and have been discarded:"),
+                    errors_str, ""), collapse = "\n")))
   }
   if (length(implausible_rows) == 1) {
-    warning(paste(length(implausible_rows), "observation is",
-                   "implausible. This observation will be kept in the",
-                   "analysis."))
+    errors_str <- utils::capture.output(print(errors[errors$importance == 2,
+                                              c("pers_id",
+                                                "description")]))
+    warning(simpleWarning(paste(c(paste(length(implausible_rows), "observation is",
+                          "implausible. This observation will be kept in the",
+                          "analysis:"),
+                    errors_str), collapse = "\n")))
   }
   if (length(implausible_rows) > 1) {
-    warning(paste(length(implausible_rows), "observations are",
-                   "implausible. These observations will be kept in the",
-                   "analysis."))
+    errors_str <- utils::capture.output(print(errors[errors$importance == 2,
+                                              c("pers_id",
+                                                "description")]))
+    warning(simpleWarning(paste(c(paste(length(implausible_rows), "observations are",
+                          "implausible. These observations will be kept in the",
+                          "analysis:"),
+                    errors_str), collapse = "\n")))
   }
   list(data = data, errors = errors)
 }
