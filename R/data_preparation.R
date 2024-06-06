@@ -38,14 +38,14 @@ build_custom_mapping <- function(data, language = "de", prompt_mapping = TRUE) {
   if (prompt_mapping) {
     # Prompt the user to map the column of her or his file one by one
     choices <- paste0(col_code, " - [", col_datalist, "]")
-    choices <- c("DO NOT MAP THIS COLUMN.", choices)
+    #choices <- c(paste0("DO NOT MAP THIS COLUMN ('", col, "')"), choices)
     custom_map <- c()
     for (col in names(data)) {
-      x <- utils::menu(choices,
-                title = paste0("Please choose the corresponding column for '",
-                               col, "'."))
+      x <- utils::menu(c(paste0("Do NOT map the column '", col, "'"), choices),
+                       title = paste0("Please choose the corresponding column for '",
+                                      col, "'."))
       # Save choice and update as to not map the same column twice
-      if (x != 1) {
+      if (x > 1) {
         custom_map <- c(custom_map, col_code[x - 1])
         col_code <- col_code[- (x - 1)]
         names(custom_map)[length(custom_map)] <- col
@@ -109,7 +109,7 @@ prepare_data <- function(data, reference_month, reference_year,
   }
   if (any(is.na(data$weekly_hours)) && is.null(usual_weekly_hours)) {
     stop(simpleWarning(paste0("'weekly_hours' has missing values, please specify ",
-                "'usual_weekly_hours'.")))
+                              "'usual_weekly_hours'.")))
   }
   if (female_spec == male_spec) {
     stop(simpleWarning("The 'female_spec' and 'male_spec' arguments must differ."))
@@ -117,13 +117,13 @@ prepare_data <- function(data, reference_month, reference_year,
   if (!is.null(age_spec)) {
     if (!(age_spec %in% c("age", "birthyear", "date_of_birth"))) {
       stop(simpleWarning(paste0("The 'age_spec' parameter must be one of 'age', 'birthyear'",
-                  ", or 'date_of_birth'")))
+                                ", or 'date_of_birth'")))
     }
   }
   if (!is.null(entry_date_spec)) {
     if (!(entry_date_spec %in% c("years", "entry_year", "entry_date"))) {
       stop(simpleWarning(paste0("The 'entry_date_spec' parameter must be one of 'years', ",
-                  "'entry_years', or 'entry_date'.")))
+                                "'entry_years', or 'entry_date'.")))
     }
   }
 
@@ -131,11 +131,11 @@ prepare_data <- function(data, reference_month, reference_year,
   sex_levels <- levels(factor(data$sex))
   if (length(sex_levels) > 2) {
     stop(simpleWarning(paste0("There are more than 2 sexes represented in the data, ",
-                "there must be exactly 2 sexes for the analysis to work.")))
+                              "there must be exactly 2 sexes for the analysis to work.")))
   }
   if (!(all(sex_levels %in% c(female_spec, male_spec)))) {
     stop(simpleWarning(paste0("The 'female_spec' and/or 'male_spec' parameters do not ",
-                "match the values in the data.")))
+                              "match the values in the data.")))
   }
   # Build the dataframe for the analysis (this will also check whether the
   # formats for age and entry_date match the specification)
@@ -147,27 +147,28 @@ prepare_data <- function(data, reference_month, reference_year,
   invalid_rows <- unique(errors$row[errors$importance == 1])
   if (length(invalid_rows) > 0) {
     if(length(invalid_rows) == 1){
-      message(paste("There is", length(invalid_rows), "invalid observation.",
-                    "Invalid observations will be discarded from the analysis.",
-                    "Do you want to continue and run the analysis without",
-                    "this observation? [y/n]"))
+      answer <- utils::menu(
+        c("Yes", "No"), title =
+          paste("There is", length(invalid_rows), "invalid observation.",
+                "Invalid observations will be discarded from the analysis.",
+                "Do you want to continue and run the analysis without",
+                "this observation?")
+      )
     }
     if(length(invalid_rows) > 1){
-      message(paste("There are", length(invalid_rows), "invalid observations.",
-                    "Invalid observations will be discarded from the analysis.",
-                    "Do you want to continue and run the analysis without",
-                    "these observations? [y/n]"))
+      answer <- utils::menu(
+        c("Yes", "No"), title =
+          paste("There are", length(invalid_rows), "invalid observations.",
+                "Invalid observations will be discarded from the analysis.",
+                "Do you want to continue and run the analysis without",
+                "these observations?")
+      )
     }
-    answer <- readline()
-    if(tolower(answer) %in% c("y", "yes")){
+    if(answer == 1){
       data <- data[-invalid_rows, ]
     }
-    if(tolower(answer) %in% c("n", "no")){
+    if(answer == 2){
       stop(simpleWarning("The analysis was aborted by the user."))
-    }
-    if(!(tolower(answer) %in% c("y", "yes", "n", "no"))){
-      stop(simpleWarning(paste("Response unclear." ,
-                 "Please repeat the analysis and respond with 'y' or 'n'.")))
     }
   }
   # Identify implausible data
@@ -176,37 +177,37 @@ prepare_data <- function(data, reference_month, reference_year,
 
   if (length(invalid_rows) == 1) {
     errors_str <- utils::capture.output(print(errors[errors$importance == 1,
-                                              c("pers_id",
-                                                "description")]))
+                                                     c("pers_id",
+                                                       "description")]))
     warning(simpleWarning(paste(c(paste(length(invalid_rows), "observation is",
-                          "invalid and has been discarded:"),
-                    errors_str, ""), collapse = "\n")))
+                                        "invalid and has been discarded:"),
+                                  errors_str, ""), collapse = "\n")))
   }
   if (length(invalid_rows) > 1) {
     errors_str <- utils::capture.output(print(errors[errors$importance == 1,
-                                              c("pers_id",
-                                                "description")]))
+                                                     c("pers_id",
+                                                       "description")]))
     warning(simpleWarning(paste(c(paste(length(invalid_rows), "observations are",
-                          "invalid and have been discarded:"),
-                    errors_str, ""), collapse = "\n")))
+                                        "invalid and have been discarded:"),
+                                  errors_str, ""), collapse = "\n")))
   }
   if (length(implausible_rows) == 1) {
     errors_str <- utils::capture.output(print(errors[errors$importance == 2,
-                                              c("pers_id",
-                                                "description")]))
+                                                     c("pers_id",
+                                                       "description")]))
     warning(simpleWarning(paste(c(paste(length(implausible_rows), "observation is",
-                          "implausible. This observation will be kept in the",
-                          "analysis:"),
-                    errors_str), collapse = "\n")))
+                                        "implausible. This observation will be kept in the",
+                                        "analysis:"),
+                                  errors_str), collapse = "\n")))
   }
   if (length(implausible_rows) > 1) {
     errors_str <- utils::capture.output(print(errors[errors$importance == 2,
-                                              c("pers_id",
-                                                "description")]))
+                                                     c("pers_id",
+                                                       "description")]))
     warning(simpleWarning(paste(c(paste(length(implausible_rows), "observations are",
-                          "implausible. These observations will be kept in the",
-                          "analysis:"),
-                    errors_str), collapse = "\n")))
+                                        "implausible. These observations will be kept in the",
+                                        "analysis:"),
+                                  errors_str), collapse = "\n")))
   }
   list(data = data, errors = errors)
 }
