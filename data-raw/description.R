@@ -14,7 +14,7 @@ usethis::use_description(fields = list(
   Package = "logib",
   Type = "Package",
   Title = "Salary Analysis by the Swiss Federal Office for Gender Equality",
-  Version = "0.2.0",
+  Version = "0.1.3",
   Description = paste(
     "Implementation of the Swiss Confederation's standard analysis model for salary analyses <https://www.ebg.admin.ch/en/equal-pay-analysis-with-logib> in R.",
     "The analysis is run at company-level and the model is intended for medium-sized and large companies. It can technically be used with 50 or more employees (apprentices, trainees/interns and expats are not included in the analysis).",
@@ -51,10 +51,10 @@ usethis::use_author(
 usethis::use_gpl3_license()
 
 # Add packages to Imports
-use_package("lubridate")
-use_package("readxl")
-use_package("stats")
-use_package("utils")
+usethis::use_package("lubridate")
+usethis::use_package("readxl")
+usethis::use_package("stats")
+usethis::use_package("utils")
 
 # Add packages to Suggests
-use_package("testthat", type = "Suggests")
+usethis::use_package("testthat", type = "Suggests")

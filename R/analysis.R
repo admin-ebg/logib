@@ -32,7 +32,6 @@
 #'
 #' @return object of type \code{analysis_model} with the following
 #' elements
-#' \itemize{
 #'    \item{\code{params}: }{The set of original parameters passed to the
 #'    function}
 #'    \item{\code{data_original}: }{The original data passed by the user in the
@@ -42,8 +41,6 @@
 #'    \item{\code{data_errors}: }{The list of errors which were found upon
 #'    checking the data}
 #'    \item{\code{results}: }{The result of the standard analysis model}
-#'
-#' }
 #'
 #' @examples
 #' results <- analysis(data = datalist_example, reference_month = 1,
