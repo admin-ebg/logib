@@ -1,4 +1,6 @@
-# logib 0.2.0
+# logib
+
+# logib 0.1.3
 
 * Updated datalists and URLs.
 * Tolerance threshold renamed to limit value.
