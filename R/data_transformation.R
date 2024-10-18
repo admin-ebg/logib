@@ -142,12 +142,8 @@ transform_data <- function(data, reference_year, usual_weekly_hours,
   # the prepare_data() function
   data$sex <- factor(data$sex, levels = c(male_spec, female_spec),
                      labels = c("M", "F"))
-  #data$level_of_requirements <- factor(data$level_of_requirements)
-  #data$professional_position <- factor(data$professional_position)
-  data$level_of_requirements <- relevel(factor(data$level_of_requirements),
-                                        max(levels(factor(data$level_of_requirements))))
-  data$professional_position <- relevel(factor(data$professional_position),
-                                        max(levels(factor(data$professional_position))))
+  data$level_of_requirements <- factor(data$level_of_requirements)
+  data$professional_position <- factor(data$professional_position)
 
   # Transform NA salary components and workload components to zero
   for (col in c("basic_wage", "allowances", "monthly_wage_13",

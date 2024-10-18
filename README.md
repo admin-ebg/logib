@@ -11,6 +11,12 @@ install.packages("devtools")
 devtools::install_github("admin-ebg/logib")
 ```
 
+### CRAN
+In order to install the latest release from CRAN, use:
+```R
+install.packages("logib")
+```
+
 ### Examples
 
 ```R

@@ -91,6 +91,21 @@ check_data <- function(data) {
                                "years_of_service",
                                "'Years of service' is more than 55", 2))
 
+  # Check for entry age
+  error_rows <- as.numeric(idx[data$age - data$years_of_service < 13])
+  errors <- rbind(errors,
+                  build_errors(error_rows, data$personal_number[error_rows],
+                               data$age[error_rows] - data$years_of_service[error_rows], "entry_age",
+                               "Entry age is less than 13", 1))
+
+  # Check for implausible entry age
+  error_rows <- as.numeric(idx[data$age - data$years_of_service < 16 &
+                                 data$age - data$years_of_service >= 13])
+  errors <- rbind(errors,
+                  build_errors(error_rows, data$personal_number[error_rows],
+                               data$age[error_rows] - data$years_of_service[error_rows], "entry_age",
+                               "Entry age is less than 16", 2))
+
   # Check for wrong training/education values
   error_rows <- as.numeric(idx[!(data$training %in% 1:8)])
   errors <- rbind(errors,
@@ -100,26 +115,33 @@ check_data <- function(data) {
                                1))
 
   # Check for FTE limits (0 - 150% or 0 - 300 hours)
-  error_rows <- idx[data$activity_rate > 150 | data$activity_rate < 0]
+  error_rows <- as.numeric(idx[data$activity_rate > 150 | data$activity_rate < 0])
   errors <- rbind(errors,
                   build_errors(error_rows, data$personal_number[error_rows],
                                data$activity_rate[error_rows], "activity_rate",
                                "'Activity rate' is not between 0% and 150%", 1))
-  error_rows <- idx[data$activity_rate > 100 & data$activity_rate <= 150]
+  error_rows <- as.numeric(idx[data$activity_rate > 100 & data$activity_rate <= 150])
   errors <- rbind(errors,
                   build_errors(error_rows, data$personal_number[error_rows],
                                data$activity_rate[error_rows], "activity_rate",
                                "'Activity rate' is above 100%", 2))
-  error_rows <- idx[data$paid_hours > 300 | data$paid_hours < 0]
+  error_rows <- as.numeric(idx[data$paid_hours > 300 | data$paid_hours < 0])
   errors <- rbind(errors,
                   build_errors(error_rows, data$personal_number[error_rows],
                                data$paid_hours[error_rows], "paid_hours",
                                "'Paid hours' is not between 0 and 300", 1))
-  error_rows <- idx[data$paid_hours >= 220 & data$paid_hours <= 300]
+  error_rows <- as.numeric(idx[data$paid_hours >= 220 & data$paid_hours <= 300])
   errors <- rbind(errors,
                   build_errors(error_rows, data$personal_number[error_rows],
                                data$paid_hours[error_rows], "paid_hours",
                                "'Paid hours' is more than 220", 2))
+
+  # Check for activity_rate and paid_hours to be both non-zero
+  error_rows <- as.numeric(idx[data$activity_rate > 0 & data$paid_hours > 0])
+  errors <- rbind(errors,
+                  build_errors(error_rows, data$personal_number[error_rows],
+                               data$paid_hours[error_rows], "paid_hours",
+                               "'Activity rate' and 'paid hours' are both non-zero", 1))
 
   # Check for non-positive basic wage
   error_rows <- as.numeric(idx[data$basic_wage < 0])
@@ -149,27 +171,23 @@ check_data <- function(data) {
                                "monthly_wage_13",
                                "'13th monthly wage' is negative", 1))
 
-  # Tolerance level for rounding errors
-  tol <- 0.1
-
   # Check for 13th monthly wage exceeding 25% of the basic wage
-  error_rows <- as.numeric(idx[4 * data$monthly_wage_13 -
-                                 data$basic_wage > tol])
+  error_rows <- as.numeric(idx[data$monthly_wage_13 > 0.25*data$basic_wage])
   errors <- rbind(errors,
                   build_errors(error_rows, data$personal_number[error_rows],
                                data$monthly_wage_13[error_rows],
                                "monthly_wage_13",
                                paste0("'13th monthly wage' exceeds 25% of the ",
-                                      "'basic wage'"), 1))
+                                      "'basic wage'"), 2))
 
-  # Check for 13th monthly wage less than 8.3% (1/12) of the basic wage
-  error_rows <- as.numeric(idx[round(data$monthly_wage_13/data$basic_wage, 3) < 0.083])
+  # Check for 13th monthly wage undercutting 8% of the basic wage
+  error_rows <- as.numeric(idx[data$monthly_wage_13 < 0.08*data$basic_wage])
   errors <- rbind(errors,
                   build_errors(error_rows, data$personal_number[error_rows],
                                data$monthly_wage_13[error_rows],
                                "monthly_wage_13",
-                               paste0("'13th monthly wage' is less than 8.3% ",
-                                      "(1/12) of the 'basic wage'"), 2))
+                               paste0("'13th monthly wage' is less than 8% of the ",
+                                      "'basic wage'"), 2))
 
   # Check for negative special payments
   error_rows <- as.numeric(idx[data$special_payments < 0])
@@ -241,7 +259,7 @@ check_data <- function(data) {
                                paste("Professional position is not an integer",
                                      "between 1 and 5"), 1))
 
-  errors
+  errors[order(errors$pers_id), ]
 }
 
 #' Builds a dataframe of errors

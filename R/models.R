@@ -30,6 +30,11 @@ run_standard_analysis_model <- function(data, sex_neutral = FALSE) {
     stop(paste0("There must be at least 1 woman and 1 man in the valid ",
                 "employees to run the standard analysis model"))
   }
+  # Change the base category
+  data$level_of_requirements <- relevel(data$level_of_requirements,
+                                        max(levels(data$level_of_requirements)))
+  data$professional_position <- relevel(data$professional_position,
+                                        max(levels(data$professional_position)))
   # Handle cases where level of requirements or professional position have 1 level only
   # by simply setting the column to a numeric 0 (thus it will be absorbed by
   # the intercept coefficient)
