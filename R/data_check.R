@@ -20,6 +20,7 @@ check_data <- function(data) {
   idx <- rownames(data)
 
   # ----- Missing values check -------------------------------------------------
+
   # Check for missing values of all obligatory columns
   obligatory_columns <- c("personal_number", "age", "sex", "years_of_service",
                           "training", "professional_function", "level_of_requirements",
@@ -34,6 +35,7 @@ check_data <- function(data) {
   }
 
   # ----- Correct values check -------------------------------------------------
+
   # Check for non-unique personal_number
   error_rows <- as.numeric(idx[duplicated(data$personal_number) |
                       duplicated(data$personal_number, fromLast = TRUE)])
@@ -49,18 +51,21 @@ check_data <- function(data) {
                   build_errors(error_rows, data$personal_number[error_rows],
                                data$age[error_rows], "age",
                                "'Age' is not a whole number", 1))
+
   # Check for age limits (>= 13, <= 100)
   error_rows <- as.numeric(idx[data$age < 13 | data$age > 100])
   errors <- rbind(errors,
                   build_errors(error_rows, data$personal_number[error_rows],
                                data$age[error_rows], "age",
                                "'Age' is not between 13 and 100", 1))
+
   # Check for plausible age limits (>= 15, <= 70)
   error_rows <- as.numeric(idx[data$age < 15 | data$age > 70])
   errors <- rbind(errors,
                   build_errors(error_rows, data$personal_number[error_rows],
                                data$age[error_rows], "age",
                                "'Age' is not between 15 and 70", 2))
+
   # Check for incorrect sex (neither F nor M)
   error_rows <- as.numeric(idx[!(data$sex %in% c("F", "M"))])
   errors <- rbind(errors,
@@ -76,6 +81,7 @@ check_data <- function(data) {
                                data$years_of_service[error_rows],
                                "years_of_service",
                                "'Years of service' is not between 0 and 85", 1))
+
   # Check for plausible years of service limits (>= 0, <= 55)
   error_rows <- as.numeric(idx[data$years_of_service > 55 &
                                  data$years_of_service <= 85])
@@ -84,6 +90,7 @@ check_data <- function(data) {
                                data$years_of_service[error_rows],
                                "years_of_service",
                                "'Years of service' is more than 55", 2))
+
   # Check for wrong training/education values
   error_rows <- as.numeric(idx[!(data$training %in% 1:8)])
   errors <- rbind(errors,
@@ -91,6 +98,7 @@ check_data <- function(data) {
                                data$training[error_rows],
                                "training", "'Training' is not between 1 and 8",
                                1))
+
   # Check for FTE limits (0 - 150% or 0 - 300 hours)
   error_rows <- idx[data$activity_rate > 150 | data$activity_rate < 0]
   errors <- rbind(errors,
@@ -112,6 +120,7 @@ check_data <- function(data) {
                   build_errors(error_rows, data$personal_number[error_rows],
                                data$paid_hours[error_rows], "paid_hours",
                                "'Paid hours' is more than 220", 2))
+
   # Check for non-positive basic wage
   error_rows <- as.numeric(idx[data$basic_wage < 0])
   errors <- rbind(errors,
@@ -124,12 +133,14 @@ check_data <- function(data) {
                   build_errors(error_rows, data$personal_number[error_rows],
                                data$basic_wage[error_rows], "basic_wage",
                                "'Basic wage' is zero", 1))
+
   # Check for negative allowances
   error_rows <- as.numeric(idx[data$allowances < 0])
   errors <- rbind(errors,
                   build_errors(error_rows, data$personal_number[error_rows],
                                data$allowances[error_rows], "allowances",
                                "'Allowances' are negative", 1))
+
   # Check for negative 13th monthly wage
   error_rows <- as.numeric(idx[data$monthly_wage_13 < 0])
   errors <- rbind(errors,
@@ -137,8 +148,10 @@ check_data <- function(data) {
                                data$monthly_wage_13[error_rows],
                                "monthly_wage_13",
                                "'13th monthly wage' is negative", 1))
+
   # Tolerance level for rounding errors
   tol <- 0.1
+
   # Check for 13th monthly wage exceeding 25% of the basic wage
   error_rows <- as.numeric(idx[4 * data$monthly_wage_13 -
                                  data$basic_wage > tol])
@@ -148,6 +161,7 @@ check_data <- function(data) {
                                "monthly_wage_13",
                                paste0("'13th monthly wage' exceeds 25% of the ",
                                       "'basic wage'"), 1))
+
   # Check for 13th monthly wage less than 8.3% (1/12) of the basic wage
   error_rows <- as.numeric(idx[round(data$monthly_wage_13/data$basic_wage, 3) < 0.083])
   errors <- rbind(errors,
@@ -156,6 +170,7 @@ check_data <- function(data) {
                                "monthly_wage_13",
                                paste0("'13th monthly wage' is less than 8.3% ",
                                       "(1/12) of the 'basic wage'"), 2))
+
   # Check for negative special payments
   error_rows <- as.numeric(idx[data$special_payments < 0])
   errors <- rbind(errors,
@@ -163,6 +178,7 @@ check_data <- function(data) {
                                data$special_payments[error_rows],
                                "special_payments",
                                "'Special payments' are negative", 1))
+
   # Check for weekly hours range (>= 1, <= 100)
   error_rows <- as.numeric(idx[data$weekly_hours < 1 | data$weekly_hours > 100])
   errors <- rbind(errors,
@@ -170,6 +186,7 @@ check_data <- function(data) {
                                data$weekly_hours[error_rows],
                                "weekly_hours",
                                "'Weekly hours' are not between 1 and 100", 1))
+
   # Check for plausible weekly hours range (>= 1, <= 50)
   error_rows <- as.numeric(idx[data$weekly_hours > 50])
   errors <- rbind(errors,
@@ -177,6 +194,7 @@ check_data <- function(data) {
                                data$weekly_hours[error_rows],
                                "weekly_hours", "'Weekly hours' are above 50",
                                2))
+
   # Check for wrong population values
   error_rows <- as.numeric(idx[!(data$population %in% 1:5)])
   errors <- rbind(errors,
@@ -184,6 +202,45 @@ check_data <- function(data) {
                                data$population[error_rows],
                                "population",
                                "'Population' is not between 1 and 5", 1))
+
+  # Check for combinations of level_of_requirements and professional_position
+  error_rows <- as.numeric(idx[data$level_of_requirements %in% 6:8 &
+                                 data$professional_position %in% 1:2])
+  errors <- rbind(errors,
+                  build_errors(error_rows, data$personal_number[error_rows],
+                               data$level_of_requirements[error_rows],
+                               "level_of_requirements",
+                               paste("Unusual combination: high professional",
+                                      "position and low level of requirements"), 2))
+
+  # Check for combinations of level_of_requirements and training
+  error_rows <- as.numeric(idx[data$level_of_requirements %in% 1:3 &
+                                 data$training %in% 7:8])
+  errors <- rbind(errors,
+                  build_errors(error_rows, data$personal_number[error_rows],
+                               data$level_of_requirements[error_rows],
+                               "level_of_requirements",
+                               paste("Unusual combination: high level of",
+                                     "requirements and low training"), 2))
+
+  # Check for incorrect level or requirements
+  error_rows <- as.numeric(idx[!(as.numeric(data$level_of_requirements) %in% 1:8)])
+  errors <- rbind(errors,
+                  build_errors(error_rows, data$personal_number[error_rows],
+                               data$level_of_requirements[error_rows],
+                               "level_of_requirements",
+                               paste("Level of requirements is not an integer",
+                                     "between 1 and 8"), 1))
+
+  # Check for incorrect professional position
+  error_rows <- as.numeric(idx[!(as.numeric(data$professional_position) %in% 1:5)])
+  errors <- rbind(errors,
+                  build_errors(error_rows, data$personal_number[error_rows],
+                               data$professional_position[error_rows],
+                               "professional_position",
+                               paste("Professional position is not an integer",
+                                     "between 1 and 5"), 1))
+
   errors
 }
 
