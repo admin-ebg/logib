@@ -2,7 +2,7 @@
 
 # logib
 
-# logib 0.2.0
+# logib 0.1.3
 
 * Datalists and URLs have been updated
 * Tolerance threshold has been renamed to limit value

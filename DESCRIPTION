@@ -21,11 +21,11 @@ Description: Implementation of the Swiss Confederation's standard analysis
     simple automation possibilities.
 License: GPL (>= 3)
 Depends: 
-    R (>= 3.2)
+    R (>= 3.1)
 Encoding: UTF-8
 LazyData: true
 Roxygen: list(markdown = TRUE)
-RoxygenNote: 7.3.1
+RoxygenNote: 7.3.2
 Imports: 
     lubridate,
     readxl,
