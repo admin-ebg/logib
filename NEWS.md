@@ -1,4 +1,4 @@
-# logib (development version)
+# logib 0.1.0
 
 # logib
 
