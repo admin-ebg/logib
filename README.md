@@ -37,9 +37,16 @@ my_data <- read_data(data_path = path_to_my_data)
 # Read the data from the pre-loaded dataframe
 my_data <- read_data(custom_data = my_dataframe)
 
+# ------------------------------------------------------------------------------
+# Variant 3: Using the included example datalist called 'datalist_example'
+
+datalist_example
+
 # ==============================================================================
 # Run the analysis and store the results
-results <- analysis(data = my_data, reference_month = 8, reference_year = 2020)
+results <- analysis(data = datalist_example, 
+   reference_month = 1, reference_year = 2019, usual_weekly_hours = 40, 
+   female_spec = "F", male_spec = "M", age_spec = "age")
 # Display the results of the analysis
 summary(results)
 ```

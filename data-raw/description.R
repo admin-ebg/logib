@@ -14,7 +14,7 @@ usethis::use_description(fields = list(
   Package = "logib",
   Type = "Package",
   Title = "Salary Analysis by the Swiss Federal Office for Gender Equality",
-  Version = "0.1.3",
+  Version = "0.1.2",
   Description = paste(
     "Implementation of the Swiss Confederation's standard analysis model for salary analyses <https://www.ebg.admin.ch/en/equal-pay-analysis-with-logib> in R.",
     "The analysis is run at company-level and the model is intended for medium-sized and large companies. It can technically be used with 50 or more employees (apprentices, trainees/interns and expats are not included in the analysis).",

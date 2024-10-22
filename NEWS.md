@@ -1,7 +1,5 @@
 # logib (development version)
 
-# logib 0.1.2 (development version)
-
 * Datalists and URLs have been updated
 * Tolerance threshold has been renamed to limit value
 * Second significance test has been removed

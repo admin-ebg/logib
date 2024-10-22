@@ -259,7 +259,12 @@ check_data <- function(data) {
                                paste("Professional position is not an integer",
                                      "between 1 and 5"), 1))
 
-  errors[order(errors$pers_id), ]
+  if(nrow(errors) > 0){
+    errors[order(errors$pers_id), ]
+  }
+  if(nrow(errors) == 0){
+    errors
+  }
 }
 
 #' Builds a dataframe of errors
