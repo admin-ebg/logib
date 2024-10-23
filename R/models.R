@@ -31,10 +31,10 @@ run_standard_analysis_model <- function(data, sex_neutral = FALSE) {
                 "employees to run the standard analysis model"))
   }
   # Change the base category
-  data$level_of_requirements <- stats::relevel(data$level_of_requirements,
-                                        max(levels(data$level_of_requirements)))
-  data$professional_position <- stats::relevel(data$professional_position,
-                                        max(levels(data$professional_position)))
+  data$level_of_requirements <- stats::relevel(factor(data$level_of_requirements),
+                                        max(levels(factor(data$level_of_requirements))))
+  data$professional_position <- stats::relevel(factor(data$professional_position),
+                                        max(levels(factor(data$professional_position))))
   # Handle cases where level of requirements or professional position have 1 level only
   # by simply setting the column to a numeric 0 (thus it will be absorbed by
   # the intercept coefficient)

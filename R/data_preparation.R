@@ -145,30 +145,37 @@ prepare_data <- function(data, reference_month, reference_year,
   errors <- check_data(data)
   # We discard all data with an error code of 1 (incorrect data)
   invalid_rows <- unique(errors$row[errors$importance == 1])
-  if (length(invalid_rows) > 0) {
-    if(length(invalid_rows) == 1){
-      answer <- utils::menu(
-        c("Yes", "No"), title =
-          paste("There is", length(invalid_rows), "invalid observation.",
-                "Invalid observations will be discarded from the analysis.",
-                "Do you want to continue and run the analysis without",
-                "this observation?")
-      )
-    }
-    if(length(invalid_rows) > 1){
-      answer <- utils::menu(
-        c("Yes", "No"), title =
-          paste("There are", length(invalid_rows), "invalid observations.",
-                "Invalid observations will be discarded from the analysis.",
-                "Do you want to continue and run the analysis without",
-                "these observations?")
-      )
-    }
-    if(answer == 1){
+  if (length(invalid_rows) > 0){
+    # Run only if interactive mode is available
+    if(interactive()) {
+      if(length(invalid_rows) == 1){
+        answer <- utils::menu(
+          c("Yes", "No"), title =
+            paste("There is", length(invalid_rows), "invalid observation.",
+                  "Invalid observations will be discarded from the analysis.",
+                  "Do you want to continue and run the analysis without",
+                  "this observation?")
+        )
+      }
+      if(length(invalid_rows) > 1){
+        answer <- utils::menu(
+          c("Yes", "No"), title =
+            paste("There are", length(invalid_rows), "invalid observations.",
+                  "Invalid observations will be discarded from the analysis.",
+                  "Do you want to continue and run the analysis without",
+                  "these observations?")
+        )
+      }
+      if(answer == 1){
+        data <- data[-invalid_rows, ]
+      }
+      if(answer == 2){
+        stop(simpleWarning("The analysis was aborted by the user."))
+      }
+    } else {
+      # If no interactive mode is available (e.g. remote testing), remove
+      # invalid row automatically
       data <- data[-invalid_rows, ]
-    }
-    if(answer == 2){
-      stop(simpleWarning("The analysis was aborted by the user."))
     }
   }
   # Identify implausible data

@@ -242,7 +242,7 @@ check_data <- function(data) {
                                      "requirements and low training"), 2))
 
   # Check for incorrect level or requirements
-  error_rows <- as.numeric(idx[!(as.numeric(data$level_of_requirements) %in% 1:8)])
+  error_rows <- as.numeric(idx[!(data$level_of_requirements %in% 1:8)])
   errors <- rbind(errors,
                   build_errors(error_rows, data$personal_number[error_rows],
                                data$level_of_requirements[error_rows],
@@ -251,7 +251,7 @@ check_data <- function(data) {
                                      "between 1 and 8"), 1))
 
   # Check for incorrect professional position
-  error_rows <- as.numeric(idx[!(as.numeric(data$professional_position) %in% 1:5)])
+  error_rows <- as.numeric(idx[!(data$professional_position %in% 1:5)])
   errors <- rbind(errors,
                   build_errors(error_rows, data$personal_number[error_rows],
                                data$professional_position[error_rows],
@@ -260,10 +260,10 @@ check_data <- function(data) {
                                      "between 1 and 5"), 1))
 
   if(nrow(errors) > 0){
-    errors[order(errors$pers_id), ]
+    return(errors[order(errors$row), ])
   }
   if(nrow(errors) == 0){
-    errors
+    return(errors)
   }
 }
 
