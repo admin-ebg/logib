@@ -135,8 +135,8 @@ summary.analysis_model <- function(object, ...) {
     2 * (1 - stats::pt(abs(coef_sex_f) / se_sex_f,
                 df = object$results$df.residual)) > sig_level, 1,
     ifelse(
-      abs(kennedy_estimate) <= target_value, 2,
-      ifelse(abs(kennedy_estimate) <= limit_value, 3, 4)))
+      floor(abs(kennedy_estimate)*1000)/1000 <= target_value, 2,
+      ifelse(floor(abs(kennedy_estimate)*1000)/1000 <= limit_value, 3, 4)))
   # Infer the print size for methodology metrics from the degrees of freedom
   np <- ceiling(log(object$results$df.residual, 10))
 
