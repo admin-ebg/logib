@@ -33,3 +33,5 @@ Imports:
     utils
 Suggests: 
     testthat
+URL: https://github.com/admin-ebg/logib
+BugReports: https://github.com/admin-ebg/logib/issues
