@@ -1,6 +1,6 @@
 #' Download official Excel datalists
 #'
-#' Downloads an empty version of the latest official excel datalist in the
+#' Downloads an empty version of the latest official Excel datalist in the
 #' specified language to the given \code{path}.
 #'
 #' @param file a character string representing the file path to which the
@@ -29,6 +29,41 @@ download_datalist <- function(file, language = "de") {
   utils::download.file(url, file, mode = "wb")
 }
 
+#' Download official filled-in sample Excel datalists
+#'
+#' Downloads a filled-in version of the latest official Excel datalist in the
+#' specified language to the given \code{path}.
+#'
+#' @param file a character string representing the file path to which the
+#' downloaded datalist will be saved.
+#' @param language a character string representing the language of the datalist
+#' to be download (\code{"de"} or \code{"fr"} or \code{"it"} or \code{"en"}).
+#'
+#' @return None
+#'
+#' @export
+download_example_datalist <- function(file, language = "de") {
+  language <- tolower(language)
+
+  # Make sure the given language and the file extension are valid
+  if (!(language %in% c("de", "en", "fr", "it"))) {
+    stop("The language must be either 'de', 'fr', 'it', or 'en'.")
+  }
+  if (substr(tolower(file), nchar(file) - 4, nchar(file)) != ".xlsx") {
+    stop("The destination file must end in .xlsx")
+  }
+
+  # Build the URL according to the given language
+  url <- paste0("https://logib.admin.ch/assets/Data/",
+                switch(language,
+                       "de" = "Beispiel_Datenblatt_M1",
+                       "fr" = "Exemple_feuille_de_donn%C3%A9es_M1",
+                       "it" = "Esempio_foglio_di_dati_M1",
+                       "en" = "Example_data_sheet_M1"), ".xlsx")
+
+  utils::download.file(url, file, mode = "wb")
+}
+
 #' Read official datalist or data_export Excel file
 #'
 #' Reads an official datalist or data_export file into a dataframe object.
@@ -41,14 +76,31 @@ download_datalist <- function(file, language = "de") {
 #' @keywords internal
 read_official_excel <- function(path) {
   col_code <- all_column_names[["code"]]
-  # If the file has 1 sheet it should be a datalist, if it has 3 it should be an
+  # If the file has 2 sheets it should be a datalist, if it has 4 it should be an
   # export file, otherwise halt the process
-  n_sheets <- length(readxl::excel_sheets(path))
-  if (n_sheets == 1) {
-    data <- readxl::read_excel(path)
+  sheet_names <- readxl::excel_sheets(path)
+  n_sheets <- length(sheet_names)
+  if (n_sheets == 2) {
+    sheet_to_read <- intersect(sheet_names, c("Vorlage_Datenblatt",
+                                              "mod\u00E8le_de_feuille_de_donn\u00E9es",
+                                              "modello_del_foglio_di_dati",
+                                              "data_sheet_template"))
+    if(!(sheet_to_read %in% sheet_names)){
+      stop(paste("The chosen file does not match any of the official files:",
+                 "Excel sheet", sheet_to_read, "is missing"))
+    }
+    data <- readxl::read_excel(path, sheet = sheet_to_read)
     data_origin <- "datalist"
-  } else if (n_sheets == 3) {
-    data <- readxl::read_excel(path, sheet = 3)
+  } else if (n_sheets == 4) {
+    sheet_to_read <- intersect(sheet_names, c("Individuelle_Angaben",
+                                              "Donn\u00E9es_individuelles",
+                                              "Dati_individuali",
+                                              "Individual_information"))
+    if(!(sheet_to_read %in% sheet_names)){
+      stop(paste("The chosen file does not match any of the official files:",
+                 "Excel sheet", sheet_to_read, "is missing"))
+    }
+    data <- readxl::read_excel(path, sheet = sheet_to_read)
     data_origin <- "data_export"
   } else {
     stop("The chosen file does not match any of the official files.")
@@ -57,14 +109,15 @@ read_official_excel <- function(path) {
   for (lang in c("de", "en", "fr", "it")) {
     col_data <- all_column_names[[data_origin]][[lang]]
     if (length(names(data)) == length(col_data)) {
-      if (all(names(data) == col_data)) {
+      # gsub removes the carriage return, \r, used by Windows
+      if (all(gsub("\r\n", "\n", names(data))[1:23] == gsub("\r\n", "\n", col_data)[1:23])) {
         # Map column names to the 'code' names and return the dataframe
+        data <- data[, 1:23]
         names(data) <- col_code
         # Transform specific columns to numerical values for the Exportfile
         if (data_origin == "data_export") {
-          data <- data[, 1:23]
           for (col_name in c("age", "years_of_service", "training",
-                             "skill_level", "professional_position",
+                             "level_of_requirements", "professional_position",
                              "activity_rate", "paid_hours", "basic_wage",
                              "allowances", "monthly_wage_13",
                              "special_payments", "weekly_hours",

@@ -6,7 +6,7 @@
 #' The standard analysis model's formula is the following:
 #'
 #' \code{log(standardized_salary) ~ years_of_training + years_of_service +
-#' years_of_earning + years_of_earning^2 + skill_level + professional_position +
+#' years_of_earning + years_of_earning^2 + level_of_requirements + professional_position +
 #' sex}
 #'
 #' The \code{sex_neutral} parameter can be used to run the sex neutral model,
@@ -30,11 +30,16 @@ run_standard_analysis_model <- function(data, sex_neutral = FALSE) {
     stop(paste0("There must be at least 1 woman and 1 man in the valid ",
                 "employees to run the standard analysis model"))
   }
-  # Handle cases where skill level or professional position have 1 level only
+  # Change the base category
+  data$level_of_requirements <- stats::relevel(factor(data$level_of_requirements),
+                                        max(levels(factor(data$level_of_requirements))))
+  data$professional_position <- stats::relevel(factor(data$professional_position),
+                                        max(levels(factor(data$professional_position))))
+  # Handle cases where level of requirements or professional position have 1 level only
   # by simply setting the column to a numeric 0 (thus it will be absorbed by
   # the intercept coefficient)
-  if (length(levels(data$skill_level)) == 1) {
-    data$skill_level <- 0
+  if (length(levels(data$level_of_requirements)) == 1) {
+    data$level_of_requirements <- 0
   }
   if (length(levels(data$professional_position)) == 1) {
     data$professional_position <- 0
@@ -42,11 +47,11 @@ run_standard_analysis_model <- function(data, sex_neutral = FALSE) {
   # Run and return the linear regression according to the sex_neutral parameter
   if (sex_neutral) {
     stats::lm(log(standardized_salary) ~ years_of_training + years_of_service +
-         years_of_earning + years_of_earning2 + skill_level +
+         years_of_earning + years_of_earning2 + level_of_requirements +
          professional_position, data = data)
   } else {
     stats::lm(log(standardized_salary) ~ years_of_training + years_of_service +
-         years_of_earning + years_of_earning2 + skill_level +
+         years_of_earning + years_of_earning2 + level_of_requirements +
          professional_position + sex, data = data)
   }
 }

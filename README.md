@@ -8,7 +8,7 @@ In order to install the package from GitHub, use the `devtools` package:
 
 ```R
 install.packages("devtools")
-devtools::install_github("JLDC/logib")
+devtools::install_github("admin-ebg/logib")
 ```
 
 ### CRAN
@@ -37,17 +37,24 @@ my_data <- read_data(data_path = path_to_my_data)
 # Read the data from the pre-loaded dataframe
 my_data <- read_data(custom_data = my_dataframe)
 
+# ------------------------------------------------------------------------------
+# Variant 3: Using the included example datalist called 'datalist_example'
+
+datalist_example
+
 # ==============================================================================
 # Run the analysis and store the results
-results <- analysis(data = my_data, reference_month = 8, reference_year = 2020)
+results <- analysis(data = datalist_example, 
+   reference_month = 1, reference_year = 2019, usual_weekly_hours = 40, 
+   female_spec = "F", male_spec = "M", age_spec = "age")
 # Display the results of the analysis
 summary(results)
 ```
 
 ### Further Resources
-+ [Federal Office for Gender Equality's information page on Logib](https://www.ebg.admin.ch/ebg/en/home/dienstleistungen/logib-triage.html) 
++ [Federal Office for Gender Equality's information page on Logib](https://www.ebg.admin.ch/en/equal-pay-analysis-with-logib) 
 + [Web implementation of the Logib salary equality model](https://www.logib.admin.ch)
-+ [Methodology](https://www.ebg.admin.ch/ebg/en/home/services/logib-triage/logib-modul-1/standardanalysemodell-bund.html)
++ [Methodology](https://www.ebg.admin.ch/en/equal-pay-analysis-with-logib)
 + Official datalists: 
 	- [English](https://www.logib.admin.ch/assets/Data/Datalist_e.xlsx)
 	- [German](https://www.logib.admin.ch/assets/Data/Datalist_d.xlsx)

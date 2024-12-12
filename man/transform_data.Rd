@@ -7,6 +7,7 @@
 transform_data(
   data,
   reference_year,
+  usual_weekly_hours,
   female_spec = "F",
   male_spec = "M",
   age_spec = NULL,
@@ -18,6 +19,9 @@ transform_data(
 be transformed}
 
 \item{reference_year}{a number indicating the reference year of the analysis}
+
+\item{usual_weekly_hours}{an optional numeric representing the usual weekly
+working hours}
 
 \item{female_spec}{a string or number indicating the way females are
 specified in the dataset.}

@@ -28,8 +28,9 @@ regression.
 }
 \examples{
 # Estimate standard analysis model
-results <- analysis(data = datalist_imprimerie, reference_month = 1,
-   reference_year = 2019, female_spec = 1, male_spec = 2)
+results <- analysis(data = datalist_example, reference_month = 1,
+   reference_year = 2019, usual_weekly_hours = 40, female_spec = "F",
+   male_spec = "M", age_spec = "age")
 
 # Show summary of the salary analysis
 summary(results)

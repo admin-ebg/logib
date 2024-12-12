@@ -8,12 +8,11 @@ prepare_data(
   data,
   reference_month,
   reference_year,
+  usual_weekly_hours,
   female_spec = "F",
   male_spec = "M",
   age_spec = NULL,
-  entry_date_spec = NULL,
-  ignore_plausibility_check = FALSE,
-  prompt_data_cleanup = FALSE
+  entry_date_spec = NULL
 )
 }
 \arguments{
@@ -25,8 +24,11 @@ analysis}
 
 \item{reference_year}{a number indicating the reference year of the analysis}
 
+\item{usual_weekly_hours}{an optional numeric representing the usual weekly
+working hours}
+
 \item{female_spec}{a string or number indicating the way females are
-specified in the dataset.}
+specified in the dataset}
 
 \item{male_spec}{a string or number indicating the way males are
 specified in the dataset}
@@ -40,14 +42,6 @@ infers the specification}
 be one of \code{NULL}, \code{"years"}, \code{"entry_year"}, or
 \code{"entry_date"}. If this parameter is set to \code{NULL}, the function
 automatically tries to infers the specification}
-
-\item{ignore_plausibility_check}{a boolean indicating whether the user wants
-to ignore implausible data. If \code{TRUE}, the implausible data is
-interpreted as being correct.}
-
-\item{prompt_data_cleanup}{a boolean indicating whether the user wants to be
-prompted regarding incorrect data values. If \code{FALSE}, the analysis will
-run without the incorrect data only.}
 }
 \value{
 a data.frame which has no incorrect rows left and can be used to
@@ -56,10 +50,10 @@ estimate the standard analysis model
 \description{
 Prepares a dataframe for the analysis in three steps:
 \itemize{
-  \item{Checks whether \code{sex}, \code{age}, and \code{entry_date} have the
-  correct format and whether their specifications are plausible}
-  \item{Build the dataframe used for the analysis}
-  \item{Check each row of the dataframe for correctness and plausibility}
+\item{Checks whether \code{sex}, \code{age}, and \code{entry_date} have the
+correct format and whether their specifications are plausible}
+\item{Build the dataframe used for the analysis}
+\item{Check each row of the dataframe for correctness and plausibility}
 }
 }
 \keyword{internal}

@@ -8,12 +8,11 @@ analysis(
   data,
   reference_month,
   reference_year,
+  usual_weekly_hours = NULL,
   female_spec = "F",
   male_spec = "M",
   age_spec = NULL,
-  entry_date_spec = NULL,
-  ignore_plausibility_check = FALSE,
-  prompt_data_cleanup = FALSE
+  entry_date_spec = NULL
 )
 }
 \arguments{
@@ -24,6 +23,11 @@ month for which we analyze the salaries}
 
 \item{reference_year}{an integer representing the reference year, i.e. the
 year for which we analyze the salaries}
+
+\item{usual_weekly_hours}{an optional numeric representing the usual weekly
+working hours (missing values in \code{weekly_hours} are replaced by
+\code{usual_weekly_hours}; if \code{NULL}, the missing values are not
+replaced)}
 
 \item{female_spec}{an optional string or numeric representing the way women
 are encoded in the \code{data}}
@@ -46,35 +50,26 @@ has been in the company, \code{"entry_year"} implies that the
 \code{entry_date} is specified as the year of the entry date of the person,
 \code{"entry_date"} implies that the age is specified as the date of entry
 of the person)}
-
-\item{ignore_plausibility_check}{a boolean indicating whether the
-plausibility of the data should be checked or whether all correct data is
-considered plausible}
-
-\item{prompt_data_cleanup}{a boolean indicating whether a prompt will pop up
-to enforce cleaning the data until all data is correct}
 }
 \value{
 object of type \code{analysis_model} with the following
 elements
-\itemize{
-   \item{\code{params}: }{The set of original parameters passed to the
-   function}
-   \item{\code{data_original}: }{The original data passed by the user in the
-   \code{data} parameter}
-   \item{\code{data_clean}: }{The cleaned up data which was used for the
-   analysis}
-   \item{\code{data_errors}: }{The list of errors which were found upon
-   checking the data}
-   \item{\code{results}: }{The result of the standard analysis model}
-
-}
+\item{\code{params}: }{The set of original parameters passed to the
+function}
+\item{\code{data_original}: }{The original data passed by the user in the
+\code{data} parameter}
+\item{\code{data_clean}: }{The cleaned up data which was used for the
+analysis}
+\item{\code{data_errors}: }{The list of errors which were found upon
+checking the data}
+\item{\code{results}: }{The result of the standard analysis model}
 }
 \description{
 Runs a salary analysis according to the Swiss standard analysis model
 }
 \examples{
-results <- analysis(data = datalist_imprimerie, reference_month = 1,
-   reference_year = 2019, female_spec = 1, male_spec = 2)
+results <- analysis(data = datalist_example, reference_month = 1,
+   reference_year = 2019, usual_weekly_hours = 40, female_spec = "F",
+   male_spec = "M", age_spec = "age")
 
 }

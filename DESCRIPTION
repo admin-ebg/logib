@@ -1,24 +1,35 @@
-Package: logib
 Type: Package
+Package: logib
 Title: Salary Analysis by the Swiss Federal Office for Gender Equality
-Version: 0.1.3
+Version: 0.1.3.9000
 Authors@R: c(
-    person(given = "Jonathan", family = "Chassot", email = "jonathanlaurentdominique.chassot@ebg.admin.ch", 
-           role = c("aut", "cre")),
-    person(given = "Jeremy", family = "Kolly", email = "logib@ebg.admin.ch", 
-           role = "ctb"),
-    person(given = "Federal Office for Gender Equality of Switzerland", 
-           email = "ebg@ebg.admin.ch", role = c("cph", "fnd"))
-    )
-Description: Implementation of the Swiss Confederation's standard analysis model for salary analyses <https://www.ebg.admin.ch/ebg/en/home/services/logib-triage/logib-modul-1/standardanalysemodell-bund.html> in R. The analysis is run at company-level and the model is intended for companies with 50 or more employees (apprentices, trainees/interns and expats are not included in the analysis). Employees with at least 100 employees are required by the Gender Equality Act to conduct an equal pay analysis.
-    This package allows users to run the equal salary analysis in R, providing additional transparency with respect to the methodology and simple automation possibilities.
-License: GPL-3
+    person("Marc", "Stöckli", , "marc.stoeckli@ebg.admin.ch", role = c("aut", "cre")),
+    person("Jonathan", "Chassot", role = "aut"),
+    person("Jeremy", "Kolly", role = "ctb"),
+    person("Federal Office for Gender Equality of Switzerland", , , "ebg@ebg.admin.ch", role = c("cph", "fnd"))
+  )
+Description: Implementation of the Swiss Confederation's standard analysis
+    model for salary analyses
+    <https://www.ebg.admin.ch/en/equal-pay-analysis-with-logib> in R. The
+    analysis is run at company-level and the model is intended for
+    medium-sized and large companies. It can technically be used with 50
+    or more employees (apprentices, trainees/interns and expats are not
+    included in the analysis). Employees with at least 100 employees are
+    required by the Gender Equality Act to conduct an equal pay analysis.
+    This package allows users to run the equal salary analysis in R,
+    providing additional transparency with respect to the methodology and
+    simple automation possibilities.
+License: GPL (>= 3)
+Depends: 
+    R (>= 3.1)
 Encoding: UTF-8
 LazyData: true
-Depends: R (>= 2.10)
-Imports:
-    lubridate (>= 1.7.9), 
-    readxl (>= 1.3.1)
-RoxygenNote: 7.1.2
+Roxygen: list(markdown = TRUE)
+RoxygenNote: 7.3.2
+Imports: 
+    lubridate,
+    readxl,
+    stats,
+    utils
 Suggests: 
     testthat

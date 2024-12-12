@@ -7,6 +7,10 @@
 #' month for which we analyze the salaries
 #' @param reference_year an integer representing the reference year, i.e. the
 #' year for which we analyze the salaries
+#' @param usual_weekly_hours an optional numeric representing the usual weekly
+#' working hours (missing values in \code{weekly_hours} are replaced by
+#' \code{usual_weekly_hours}; if \code{NULL}, the missing values are not
+#' replaced)
 #' @param female_spec an optional string or numeric representing the way women
 #' are encoded in the \code{data}
 #' @param male_spec an optional string or numeric representing the way men are
@@ -25,15 +29,9 @@
 #' \code{entry_date} is specified as the year of the entry date of the person,
 #' \code{"entry_date"} implies that the age is specified as the date of entry
 #' of the person)
-#' @param ignore_plausibility_check a boolean indicating whether the
-#' plausibility of the data should be checked or whether all correct data is
-#' considered plausible
-#' @param prompt_data_cleanup a boolean indicating whether a prompt will pop up
-#' to enforce cleaning the data until all data is correct
 #'
 #' @return object of type \code{analysis_model} with the following
 #' elements
-#' \itemize{
 #'    \item{\code{params}: }{The set of original parameters passed to the
 #'    function}
 #'    \item{\code{data_original}: }{The original data passed by the user in the
@@ -44,26 +42,25 @@
 #'    checking the data}
 #'    \item{\code{results}: }{The result of the standard analysis model}
 #'
-#' }
-#'
 #' @examples
-#' results <- analysis(data = datalist_imprimerie, reference_month = 1,
-#'    reference_year = 2019, female_spec = 1, male_spec = 2)
+#' results <- analysis(data = datalist_example, reference_month = 1,
+#'    reference_year = 2019, usual_weekly_hours = 40, female_spec = "F",
+#'    male_spec = "M", age_spec = "age")
 #'
 #' @export
-analysis <- function(data, reference_month, reference_year, female_spec = "F",
-                     male_spec = "M", age_spec = NULL, entry_date_spec = NULL,
-                     ignore_plausibility_check = FALSE,
-                     prompt_data_cleanup = FALSE) {
+analysis <- function(data, reference_month, reference_year,
+                     usual_weekly_hours = NULL, female_spec = "F", male_spec = "M",
+                     age_spec = NULL, entry_date_spec = NULL) {
   params <- list(reference_month = reference_month,
-                 reference_year = reference_year, female_spec = female_spec,
-                 male_spec = male_spec, age_spec = age_spec,
-                 entry_date_spec = entry_date_spec)
+                 reference_year = reference_year,
+                 usual_weekly_hours = usual_weekly_hours,
+                 female_spec = female_spec, male_spec = male_spec,
+                 age_spec = age_spec, entry_date_spec = entry_date_spec)
   data_original <- data
   data_prepared <- prepare_data(data, reference_month, reference_year,
-                                female_spec, male_spec, age_spec,
-                                entry_date_spec, ignore_plausibility_check,
-                                prompt_data_cleanup)
+                                usual_weekly_hours, female_spec, male_spec,
+                                age_spec, entry_date_spec)
+  data_prepared$data <- data_prepared$data[data_prepared$data$population == 1,]
   results <- run_standard_analysis_model(data_prepared$data)
   output <- list(params = params,
                  data_original = data_original,
@@ -94,8 +91,9 @@ analysis <- function(data, reference_month, reference_year, female_spec = "F",
 #'
 #' @examples
 #' # Estimate standard analysis model
-#' results <- analysis(data = datalist_imprimerie, reference_month = 1,
-#'    reference_year = 2019, female_spec = 1, male_spec = 2)
+#' results <- analysis(data = datalist_example, reference_month = 1,
+#'    reference_year = 2019, usual_weekly_hours = 40, female_spec = "F",
+#'    male_spec = "M", age_spec = "age")
 #'
 #' # Show summary of the salary analysis
 #' summary(results)
@@ -124,17 +122,21 @@ summary.analysis_model <- function(object, ...) {
            "method does not allow a valid gender effect to be determined."),
     paste0("The value is statistically significant. The statistical method ",
            "allows a valid gender effect to be determined."),
-    paste0("The value exceeds 5%, which is statistically significant. The ",
-           "statistical method allows a major, valid gender effect to be ",
+    paste0("The value is statistically significant. The value exceeds the target value of 2.5%. ",
+           "The statistical method allows a valid gender effect to be ",
+           "determined."),
+    paste0("The value is statistically significant. The value exceeds the limit value of 5%. ",
+           "The statistical method allows a major, valid gender effect to be ",
            "determined."))
   sig_level <- 0.05
-  h0_threshold <- 0.05
+  target_value <- 0.025
+  limit_value <- 0.05
   rating_level <- ifelse(
     2 * (1 - stats::pt(abs(coef_sex_f) / se_sex_f,
                 df = object$results$df.residual)) > sig_level, 1,
     ifelse(
-      1 - stats::pt((abs(coef_sex_f) - h0_threshold) / se_sex_f,
-             df = object$results$df.residual) > sig_level, 2, 3))
+      floor(abs(kennedy_estimate)*1000)/1000 <= target_value, 2,
+      ifelse(floor(abs(kennedy_estimate)*1000)/1000 <= limit_value, 3, 4)))
   # Infer the print size for methodology metrics from the degrees of freedom
   np <- ceiling(log(object$results$df.residual, 10))
 
@@ -182,17 +184,4 @@ summary.analysis_model <- function(object, ...) {
                         object$results$df.residual)), sep = "")
   cat(sprintf("%-48s: %s\n\n", "Significance", ifelse(rating_level == 1, "No",
                                                    "Yes")))
-  cat(paste0("Test to see whether the wage difference significantly exceeds ",
-             "the tolerance threshold\n"), sep = "")
-  cat(rep("-", 80), "\n", sep = "")
-  cat("H0: Wage diff. = 5%; HA: Wage diff. > 5%\n", sep = "")
-  cat(sprintf(paste0("%-48s: %", np + 4, ".3f\n"), "Critical t-value",
-              stats::qt(.95, object$results$df.residual)))
-  cat("(Alpha = 5%, one-sided, N = degrees of freedom)\n", sep = "")
-  cat(sprintf(paste0("%-48s: %", np + 4, ".3f\n"), "Test statistic t",
-              stats::qt(stats::pt((abs(coef_sex_f) - h0_threshold) / se_sex_f,
-                                  object$results$df.residual),
-                        object$results$df.residual)), sep = "")
-  cat(sprintf("%-48s: %s\n\n", "Significance", ifelse(rating_level == 3, "Yes",
-                                                       "No")))
 }

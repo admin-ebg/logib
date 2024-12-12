@@ -121,6 +121,8 @@ compute_years_of_service <- function(x, entry_date_spec = NULL,
 #' @param data a dataframe object as produced by \code{read_data} which is to
 #' be transformed
 #' @param reference_year a number indicating the reference year of the analysis
+#' @param usual_weekly_hours an optional numeric representing the usual weekly
+#' working hours
 #' @param female_spec a string or number indicating the way females are
 #' specified in the dataset.
 #' @param male_spec a string or number indicating the way males are
@@ -133,15 +135,13 @@ compute_years_of_service <- function(x, entry_date_spec = NULL,
 #' be one of \code{NULL}, \code{"years"}, \code{"entry_year"}, or
 #' \code{"entry_date"}. If this parameter is set to \code{NULL}, the function
 #' automatically tries to infers the specification
-transform_data <- function(data, reference_year, female_spec = "F",
-                           male_spec = "M", age_spec = NULL,
+transform_data <- function(data, reference_year, usual_weekly_hours,
+                           female_spec = "F", male_spec = "M", age_spec = NULL,
                            entry_date_spec = NULL) {
   # At this stage, the specifications must be OK as they are being checked in
   # the prepare_data() function
   data$sex <- factor(data$sex, levels = c(male_spec, female_spec),
                      labels = c("M", "F"))
-  data$skill_level <- factor(data$skill_level)
-  data$professional_position <- factor(data$professional_position)
 
   # Transform NA salary components and workload components to zero
   for (col in c("basic_wage", "allowances", "monthly_wage_13",
@@ -160,15 +160,15 @@ transform_data <- function(data, reference_year, female_spec = "F",
                                   function(x) max(x, 0))
   data$years_of_earning2 <- data$years_of_earning^2
 
+  # Replace NA in weekly_hours with usual_weekly_hours
+  data$weekly_hours <- ifelse(is.na(data$weekly_hours),
+                              usual_weekly_hours,
+                              data$weekly_hours)
+
   # Get most frequent weekly workhours for standardization (highest in case of
   # equality)
   mfww <- max(as.numeric(names(which(table(data$weekly_hours) == max(table(
     data$weekly_hours))))))
-  # Special case when there are no weekly hours and only hourly contracts
-  if (mfww == 0) {
-    mfww <- max(as.numeric(names(which(table(data$annual_hours) == max(table(
-      data$annual_hours)))))) / 52
-  }
 
   # Build an FTE column for salary standardization
   data$fte <- (data$weekly_hours * data$activity_rate) / (100 * mfww)
@@ -182,6 +182,9 @@ transform_data <- function(data, reference_year, female_spec = "F",
   data$standardized_salary <- data$standardized_basic_wage +
     data$standardized_allowances + data$standardized_monthly_wage_13 +
     data$standardized_special_payments
+
+  # Replace NA in population with 1
+  data$population <- ifelse(is.na(data$population), 1, data$population)
 
   data
 }

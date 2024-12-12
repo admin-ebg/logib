@@ -23,7 +23,7 @@ regression) for salary equality between women and men.
 The standard analysis model's formula is the following:
 
 \code{log(standardized_salary) ~ years_of_training + years_of_service +
-years_of_earning + years_of_earning^2 + skill_level + professional_position +
+years_of_earning + years_of_earning^2 + level_of_requirements + professional_position +
 sex}
 
 The \code{sex_neutral} parameter can be used to run the sex neutral model,
