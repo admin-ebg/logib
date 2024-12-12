@@ -5,7 +5,9 @@
 * Second significance test has been removed
 * Level of requirements can now be coded with eight levels
 * prompt_data_cleanup has been removed
-
-# logib 0.1.2
-
 * Update datalist column names
+
+
+# logib 0.1.3
+
+* Update link to methodology document
