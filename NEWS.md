@@ -10,6 +10,6 @@
 * Update datalist column names
 
 
-# logib 0.1.3
+# logib 0.1.2
 
 * Update link to methodology document
