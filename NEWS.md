@@ -1,4 +1,5 @@
 # logib (development version)
+* Update example datalist description
 
 # logib 0.2.0
 

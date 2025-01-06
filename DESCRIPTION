@@ -5,7 +5,7 @@ Version: 0.2.0.9000
 Authors@R: c(
     person("Marc", "Stöckli", , "marc.stoeckli@ebg.admin.ch", role = c("aut", "cre")),
     person("Jonathan", "Chassot", role = "aut"),
-    person("Jeremy", "Kolly", role = "ctb"),
+    person("Jeremy", "Kolly", role = "aut"),
     person("Federal Office for Gender Equality of Switzerland", , , "ebg@ebg.admin.ch", role = c("cph", "fnd"))
   )
 Description: Implementation of the Swiss Confederation's standard analysis

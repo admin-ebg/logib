@@ -3,15 +3,15 @@
 #' Fictional dataset containing the necessary information to run an equal pay
 #' analysis.
 #'
-#' @format A data frame with 318 rows and 23 variables:
+#' @format A data frame with 285 rows and 23 variables:
 #' \describe{
 #'   \item{personal_number}{personal number of the employee, alphanumeric},
 #'   \item{age}{age, in years},
-#'   \item{sex}{sex, 1 = male, 2 = female},
+#'   \item{sex}{sex, M = male, F = female},
 #'   \item{years_of_service}{years of service, in years},
 #'   \item{training}{training code, 1-8},
 #'   \item{professional_function}{function / job},
-#'   \item{level_of_requirements}{level of requirements code, 1-4},
+#'   \item{level_of_requirements}{level of requirements code, 1-8},
 #'   \item{professional_position}{professional position / hierarchy code, 1-5},
 #'   \item{activity_rate}{activity rate, in percent},
 #'   \item{paid_hours}{paid hours, in hours},
