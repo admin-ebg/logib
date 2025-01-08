@@ -27,11 +27,19 @@ check_data <- function(data) {
                           "professional_position", "basic_wage", "population")
   for (col in obligatory_columns) {
     error_rows <- as.numeric(idx[is.na(data[, col])])
-    errors <- rbind(errors,
-                    build_errors(error_rows, data$personal_number[error_rows],
-                                 rep(NA, length(error_rows)), col,
-                                 paste0("Missing '", gsub("_", " ", col), "'"),
-                                 1))
+    errors <- rbind(
+      errors,
+      build_errors(error_rows, data$personal_number[error_rows],
+                   rep(NA, length(error_rows)), col,
+                   paste0(
+                     "Missing '",
+                     paste0(
+                       toupper(substr(gsub("_", " ",
+                                           col), 1, 1)),
+                       tolower(substr(gsub("_", " ",
+                                           col), 2, nchar(gsub("_", " ", col))))
+                     ), "'"), 1)
+    )
   }
 
   # ----- Correct values check -------------------------------------------------
@@ -96,7 +104,7 @@ check_data <- function(data) {
   errors <- rbind(errors,
                   build_errors(error_rows, data$personal_number[error_rows],
                                data$age[error_rows] - data$years_of_service[error_rows], "entry_age",
-                               "Entry age is less than 13", 1))
+                               "Entry age ('Age' - 'Years of service') is less than 13", 1))
 
   # Check for implausible entry age
   error_rows <- as.numeric(idx[data$age - data$years_of_service < 16 &
@@ -104,7 +112,7 @@ check_data <- function(data) {
   errors <- rbind(errors,
                   build_errors(error_rows, data$personal_number[error_rows],
                                data$age[error_rows] - data$years_of_service[error_rows], "entry_age",
-                               "Entry age is less than 16", 2))
+                               "Entry age ('Age' - 'Years of service') is less than 16", 2))
 
   # Check for wrong training/education values
   error_rows <- as.numeric(idx[!(data$training %in% 1:8)])

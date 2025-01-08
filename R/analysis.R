@@ -60,7 +60,6 @@ analysis <- function(data, reference_month, reference_year,
   data_prepared <- prepare_data(data, reference_month, reference_year,
                                 usual_weekly_hours, female_spec, male_spec,
                                 age_spec, entry_date_spec)
-  data_prepared$data <- data_prepared$data[data_prepared$data$population == 1,]
   results <- run_standard_analysis_model(data_prepared$data)
   output <- list(params = params,
                  data_original = data_original,
@@ -118,16 +117,31 @@ summary.analysis_model <- function(object, ...) {
 
   # Significance tests
   ratings <- c(
-    paste0("The value is not statistically significant. The statistical ",
-           "method does not allow a valid gender effect to be determined."),
-    paste0("The value is statistically significant. The statistical method ",
-           "allows a valid gender effect to be determined."),
-    paste0("The value is statistically significant. The value exceeds the target value of 2.5%. ",
-           "The statistical method allows a valid gender effect to be ",
-           "determined."),
-    paste0("The value is statistically significant. The value exceeds the limit value of 5%. ",
-           "The statistical method allows a major, valid gender effect to be ",
-           "determined."))
+    paste0("This pay difference is not statistically significant. ",
+           "The pay difference may solely be explained by \n",
+           "the interaction of various objective factors such as ",
+           "age, education and professional position."),
+    paste0("This pay difference is statistically significant. ",
+           "The pay difference may not or not solely be \n",
+           "explained by the interaction of various objective factors such as ",
+           "age, education and professional position."),
+    paste0("This pay difference is statistically significant. ",
+           "The pay difference may not or not solely be \n",
+           "explained by the interaction of various objective factors such as ",
+           "age, education and professional position.\n\n",
+           "The target value of 2.5% has been exceeded. ",
+           "The target value is a voluntary benchmark aimed at motivating \n",
+           "employers to consistently avoid unexplained pay differences."),
+    paste0("This pay difference is statistically significant. ",
+           "The pay difference may not or not solely be \n",
+           "explained by the interaction of various objective factors such as ",
+           "age, education and professional position.\n\n",
+           "The limit value of 5% has been exceeded. ",
+           "With this pay difference you do not satisfy the requirements applied to \n",
+           "various contexts, in particular the requirements of the Gender ",
+           "Equality Act and the participation requirements \n",
+           "for public procurement of the Confederation regarding equal treatment between ",
+           "women and men in terms of salary."))
   sig_level <- 0.05
   target_value <- 0.025
   limit_value <- 0.05

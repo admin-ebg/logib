@@ -141,29 +141,39 @@ prepare_data <- function(data, reference_month, reference_year,
   # formats for age and entry_date match the specification)
   data <- transform_data(data, reference_year, usual_weekly_hours,
                          female_spec, male_spec, age_spec, entry_date_spec)
+  # Remove data with population != 1
+  data <- data[data$population == 1,]
   # Check the data for correctness and plausibility
   errors <- check_data(data)
+
+  # Add row-column identifier
+  if (nrow(errors) > 0){
+    errors <- cbind(errors, row_column = paste0(errors$row, "_", errors$column))
+  }
+
   # We discard all data with an error code of 1 (incorrect data)
+  invalid_row_columns <- unique(errors$row_column[errors$importance == 1])
   invalid_rows <- unique(errors$row[errors$importance == 1])
+
   if (length(invalid_rows) > 0){
     # Run only if interactive mode is available
     if(interactive()) {
       if(length(invalid_rows) == 1){
         answer <- utils::menu(
           c("Yes", "No"), title =
-            paste("There is", length(invalid_rows), "invalid observation.",
-                  "Invalid observations will be discarded from the analysis.",
+            paste("There is", length(invalid_rows), "data set with invalid values.",
+                  "Data sets with invalid values will be discarded from the analysis.",
                   "Do you want to continue and run the analysis without",
-                  "this observation?")
+                  "this data set?")
         )
       }
       if(length(invalid_rows) > 1){
         answer <- utils::menu(
           c("Yes", "No"), title =
-            paste("There are", length(invalid_rows), "invalid observations.",
-                  "Invalid observations will be discarded from the analysis.",
+            paste("There are", length(invalid_rows), "data sets with invalid values.",
+                  "Data sets with invalid values will be discarded from the analysis.",
                   "Do you want to continue and run the analysis without",
-                  "these observations?")
+                  "these data sets?")
         )
       }
       if(answer == 1){
@@ -178,42 +188,84 @@ prepare_data <- function(data, reference_month, reference_year,
       data <- data[-invalid_rows, ]
     }
   }
-  # Identify implausible data
-  implausible_rows <- unique(errors$row[errors$importance == 2])
-  implausible_rows <- setdiff(implausible_rows, invalid_rows)
 
-  if (length(invalid_rows) == 1) {
-    errors_str <- utils::capture.output(print(errors[errors$importance == 1,
-                                                     c("pers_id",
-                                                       "description")]))
-    warning(simpleWarning(paste(c(paste(length(invalid_rows), "observation is",
-                                        "invalid and has been discarded:"),
+  # Clean-up double-reporting for missing values
+  if (nrow(errors) > 0){
+    invalid_missings <- errors[substr(errors$description, 1, 7) == "Missing", ]
+    invalid_nonmissings <- errors[!(errors$row_column %in% invalid_missings$row_column) &
+                                    errors$importance == 1,]
+    invalid_all <- rbind(invalid_missings,
+                         invalid_nonmissings)[, c("pers_id",
+                                                  "description")]
+    invalid_all <- invalid_all[order(invalid_all$pers_id), ]
+  }
+
+
+  if (length(invalid_rows) == 1 &
+      length(invalid_row_columns) == 1) {
+    errors_str <- utils::capture.output(print(
+      invalid_all
+    ))
+    warning(simpleWarning(paste(c(paste(length(invalid_rows), "data set has",
+                                        "an invalid value and has been discarded:"),
+                                  errors_str, ""), collapse = "\n")))
+  }
+  if (length(invalid_rows) == 1 &
+      length(invalid_row_columns) > 1) {
+    errors_str <- utils::capture.output(print(
+      invalid_all
+    ))
+    warning(simpleWarning(paste(c(paste(length(invalid_rows), "data set has",
+                                        "a total of", length(invalid_row_columns),
+                                        "invalid values and has been discarded:"),
                                   errors_str, ""), collapse = "\n")))
   }
   if (length(invalid_rows) > 1) {
-    errors_str <- utils::capture.output(print(errors[errors$importance == 1,
-                                                     c("pers_id",
-                                                       "description")]))
-    warning(simpleWarning(paste(c(paste(length(invalid_rows), "observations are",
-                                        "invalid and have been discarded:"),
+    errors_str <- utils::capture.output(print(
+      invalid_all
+    ))
+    warning(simpleWarning(paste(c(paste(length(invalid_rows), "data sets have",
+                                        "a total of", length(invalid_row_columns),
+                                        "invalid values and have been discarded:"),
                                   errors_str, ""), collapse = "\n")))
   }
-  if (length(implausible_rows) == 1) {
-    errors_str <- utils::capture.output(print(errors[errors$importance == 2,
-                                                     c("pers_id",
-                                                       "description")]))
-    warning(simpleWarning(paste(c(paste(length(implausible_rows), "observation is",
-                                        "implausible. This observation will be kept in the",
-                                        "analysis:"),
+
+  # Identify striking values
+  striking_row_columns <- setdiff(unique(errors$row_column[errors$importance == 2]),
+                                  unique(errors$row_column[errors$importance == 1]))
+  striking_rows <- unique(errors[errors$row_column %in% striking_row_columns, "row"])
+
+  if (length(striking_rows) == 1 &
+      length(striking_row_columns) == 1) {
+    errors_str <- utils::capture.output(print(
+      errors[errors$row_column %in% striking_row_columns,
+             c("pers_id",
+               "description")]
+    ))
+    warning(simpleWarning(paste(c(paste(length(striking_rows), "data set",
+                                        "has a striking value:"),
                                   errors_str), collapse = "\n")))
   }
-  if (length(implausible_rows) > 1) {
-    errors_str <- utils::capture.output(print(errors[errors$importance == 2,
-                                                     c("pers_id",
-                                                       "description")]))
-    warning(simpleWarning(paste(c(paste(length(implausible_rows), "observations are",
-                                        "implausible. These observations will be kept in the",
-                                        "analysis:"),
+  if (length(striking_rows) == 1 &
+      length(striking_row_columns) > 1) {
+    errors_str <- utils::capture.output(print(
+      errors[errors$row_column %in% striking_row_columns,
+             c("pers_id",
+               "description")]
+    ))
+    warning(simpleWarning(paste(c(paste(length(striking_rows), "data set has",
+                                        length(striking_row_columns), "striking values:"),
+                                  errors_str), collapse = "\n")))
+  }
+  if (length(striking_rows) > 1) {
+    errors_str <- utils::capture.output(print(
+      errors[errors$row_column %in% striking_row_columns,
+             c("pers_id",
+               "description")]
+    ))
+    warning(simpleWarning(paste(c(paste(length(striking_rows), "data sets",
+                                        "have a total of",
+                                        length(striking_row_columns), "striking values:"),
                                   errors_str), collapse = "\n")))
   }
   list(data = data, errors = errors)
