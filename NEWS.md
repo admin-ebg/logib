@@ -1,5 +1,6 @@
 # logib (development version)
 * Update example datalist description
+* Warning messages have been adjusted
 
 # logib 0.2.0
 

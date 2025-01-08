@@ -1,8 +1,7 @@
 # Test the expected output of a salary analysis using the internal data
 test_that(paste0("analysis() returns an object of type ",
                  "analysis_model"), {
-                   data <- datalist_example[datalist_example$population == 1,]
-                   results <- analysis(data, reference_month = 1,
+                   results <- analysis(datalist_example, reference_month = 1,
                                        reference_year = 2019,
                                        usual_weekly_hours = 40,
                                        female_spec = "F", male_spec = "M",
@@ -11,8 +10,7 @@ test_that(paste0("analysis() returns an object of type ",
                  })
 
 test_that("analysis() returns a list object", {
-  data <- datalist_example[datalist_example$population == 1,]
-  results <- analysis(data, reference_month = 1,
+  results <- analysis(datalist_example, reference_month = 1,
                       reference_year = 2019,
                       usual_weekly_hours = 40,
                       female_spec = "F", male_spec = "M",
@@ -21,8 +19,7 @@ test_that("analysis() returns a list object", {
 })
 
 test_that("analysis() returns the correct results using internal data", {
-  data <- datalist_example[datalist_example$population == 1,]
-  results <- analysis(data, reference_month = 1,
+  results <- analysis(datalist_example, reference_month = 1,
                       reference_year = 2019,
                       usual_weekly_hours = 40,
                       female_spec = "F", male_spec = "M",
@@ -42,8 +39,7 @@ test_that("analysis() returns the correct results using downloaded example data 
   download_example_datalist(testthat::test_path("Beispiel_Datenblatt_M1.xlsx"),
                             language = "de")
   datalist_download <- read_data(testthat::test_path("Beispiel_Datenblatt_M1.xlsx"))
-  data <- datalist_download[datalist_download$population == 1,]
-  results <- analysis(data,
+  results <- analysis(datalist_example,
                       reference_month = 1, reference_year = 2019,
                       usual_weekly_hours = 40,
                       female_spec = "F", male_spec = "M",
@@ -62,8 +58,7 @@ test_that("analysis() returns the correct results using downloaded example data 
   download_example_datalist(testthat::test_path("Exemple_feuille_de_donnees_M1.xlsx"),
                             language = "fr")
   datalist_download <- read_data(testthat::test_path("Exemple_feuille_de_donnees_M1.xlsx"))
-  data <- datalist_download[datalist_download$population == 1,]
-  results <- analysis(data,
+  results <- analysis(datalist_example,
                       reference_month = 1, reference_year = 2019,
                       usual_weekly_hours = 40,
                       female_spec = "F", male_spec = "M",
@@ -82,8 +77,7 @@ test_that("analysis() returns the correct results using downloaded example data 
   download_example_datalist(testthat::test_path("Esempio_foglio_di_dati_M1.xlsx"),
                             language = "it")
   datalist_download <- read_data(testthat::test_path("Esempio_foglio_di_dati_M1.xlsx"))
-  data <- datalist_download[datalist_download$population == 1,]
-  results <- analysis(data,
+  results <- analysis(datalist_example,
                       reference_month = 1, reference_year = 2019,
                       usual_weekly_hours = 40,
                       female_spec = "F", male_spec = "M",
@@ -102,8 +96,7 @@ test_that("analysis() returns the correct results using downloaded example data 
   download_example_datalist(testthat::test_path("Example_data_sheet_M1.xlsx"),
                             language = "en")
   datalist_download <- read_data(testthat::test_path("Example_data_sheet_M1.xlsx"))
-  data <- datalist_download[datalist_download$population == 1,]
-  results <- analysis(data,
+  results <- analysis(datalist_example,
                       reference_month = 1, reference_year = 2019,
                       usual_weekly_hours = 40,
                       female_spec = "F", male_spec = "M",
