@@ -14,7 +14,7 @@ usethis::use_description(fields = list(
   Package = "logib",
   Type = "Package",
   Title = "Salary Analysis by the Swiss Federal Office for Gender Equality",
-  Version = "0.1.2",
+  Version = "0.2.0.9000",
   Description = paste(
     "Implementation of the Swiss Confederation's standard analysis model for salary analyses <https://www.ebg.admin.ch/en/equal-pay-analysis-with-logib> in R.",
     "The analysis is run at company-level and the model is intended for medium-sized and large companies. It can technically be used with 50 or more employees (apprentices, trainees/interns and expats are not included in the analysis).",
@@ -32,6 +32,11 @@ usethis::use_author(
   role = c("aut", "cre")
 )
 usethis::use_author(
+  given = "Silvia",
+  family = "Strub",
+  role = "ctb"
+)
+usethis::use_author(
   given = "Jonathan",
   family = "Chassot",
   role = "aut"
@@ -39,7 +44,7 @@ usethis::use_author(
 usethis::use_author(
   given = "Jeremy",
   family = "Kolly",
-  role = "ctb"
+  role = "aut"
 )
 usethis::use_author(
   given = "Federal Office for Gender Equality of Switzerland",
@@ -58,3 +63,6 @@ usethis::use_package("utils")
 
 # Add packages to Suggests
 usethis::use_package("testthat", type = "Suggests")
+
+# Add URLs
+usethis::use_github_links()
