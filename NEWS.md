@@ -1,6 +1,7 @@
 # logib (development version)
 * Update example datalist description
 * Warning messages have been adjusted
+* Added Silvia Strub as contributor
 
 # logib 0.2.0
 

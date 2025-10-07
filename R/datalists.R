@@ -26,7 +26,7 @@ download_datalist <- function(file, language = "de") {
   url <- paste0("https://logib.admin.ch/assets/Data/Datalist_",
                 substr(language, 1, 1), ".xlsx")
 
-  utils::download.file(url, file, mode = "wb")
+  utils::download.file(url, file, mode = "wb", method = "libcurl")
 }
 
 #' Download official filled-in sample Excel datalists
@@ -57,11 +57,11 @@ download_example_datalist <- function(file, language = "de") {
   url <- paste0("https://logib.admin.ch/assets/Data/",
                 switch(language,
                        "de" = "Beispiel_Datenblatt_M1",
-                       "fr" = "Exemple_feuille_de_donn%C3%A9es_M1",
+                       "fr" = "Exemple_feuille_de_donnees_M1",
                        "it" = "Esempio_foglio_di_dati_M1",
                        "en" = "Example_data_sheet_M1"), ".xlsx")
 
-  utils::download.file(url, file, mode = "wb")
+  utils::download.file(url, file, mode = "wb", method = "libcurl")
 }
 
 #' Read official datalist or data_export Excel file

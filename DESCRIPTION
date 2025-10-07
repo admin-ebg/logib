@@ -22,7 +22,7 @@ Description: Implementation of the Swiss Confederation's standard analysis
     simple automation possibilities.
 License: GPL (>= 3)
 Depends: 
-    R (>= 3.1)
+    R (>= 3.5)
 Encoding: UTF-8
 LazyData: true
 Roxygen: list(markdown = TRUE)
