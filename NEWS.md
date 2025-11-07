@@ -1,4 +1,4 @@
-# logib (development version)
+# logib 0.3.0
 * Update example datalist description
 * Warning messages have been adjusted
 * Added Silvia Strub as contributor
