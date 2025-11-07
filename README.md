@@ -1,6 +1,6 @@
 # Logib
 ## Introduction
-The package `logib` is an `R` implementation of the Swiss Confederation's salary analysis tool for assessing equal pay practices (https://www.logib.admin.ch)
+The package `logib` is an `R` implementation of the Swiss Confederation's salary analysis tool for assessing equal pay practices (www.logib.admin.ch)
 
 ## Installation
 ### GitHub
@@ -52,11 +52,11 @@ summary(results)
 ```
 
 ### Further Resources
-+ [Federal Office for Gender Equality's information page on Logib](https://www.ebg.admin.ch/en/equal-pay-analysis-with-logib) 
-+ [Web implementation of the Logib salary equality model](https://www.logib.admin.ch)
-+ [Methodology](https://www.ebg.admin.ch/en/equal-pay-analysis-with-logib)
++ [Federal Office for Gender Equality's information page on Logib](www.ebg.admin.ch/en/equal-pay-analysis-with-logib) 
++ [Web implementation of the Logib salary equality model](www.logib.admin.ch)
++ [Methodology](www.ebg.admin.ch/en/equal-pay-analysis-with-logib)
 + Official datalists: 
-	- [English](https://www.logib.admin.ch/assets/Data/Datalist_e.xlsx)
-	- [German](https://www.logib.admin.ch/assets/Data/Datalist_d.xlsx)
-	- [French](https://www.logib.admin.ch/assets/Data/Datalist_f.xlsx)
-	- [Italian](https://www.logib.admin.ch/assets/Data/Datalist_i.xlsx)
+	- [English](www.logib.admin.ch/assets/Data/Datalist_e.xlsx)
+	- [German](www.logib.admin.ch/assets/Data/Datalist_d.xlsx)
+	- [French](www.logib.admin.ch/assets/Data/Datalist_f.xlsx)
+	- [Italian](www.logib.admin.ch/assets/Data/Datalist_i.xlsx)

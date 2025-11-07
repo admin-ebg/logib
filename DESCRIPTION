@@ -11,7 +11,7 @@ Authors@R: c(
   )
 Description: Implementation of the Swiss Confederation's standard analysis
     model for salary analyses
-    <https://www.ebg.admin.ch/en/equal-pay-analysis-with-logib> in R. The
+    <www.ebg.admin.ch/en/equal-pay-analysis-with-logib> in R. The
     analysis is run at company-level and the model is intended for
     medium-sized and large companies. It can technically be used with 50
     or more employees (apprentices, trainees/interns and expats are not
