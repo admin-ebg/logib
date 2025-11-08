@@ -1,7 +1,7 @@
 Type: Package
 Package: logib
 Title: Salary Analysis by the Swiss Federal Office for Gender Equality
-Version: 0.2.1
+Version: 0.2.1.9000
 Authors@R: c(
     person("Marc", "Stöckli", , "marc.stoeckli@ebg.admin.ch", role = c("aut", "cre")),
     person("Silvia", "Strub", role = "ctb"),
